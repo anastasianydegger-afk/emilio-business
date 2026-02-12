@@ -88,6 +88,25 @@
 - **Pros:** ✅ Beautiful location, daily operation, fresh produce
 - **Cons:** Slightly pricier than Valletta, touristy area
 
+### Option B: **Greens Supermarket Malta** (Multi-location, online ordering, delivery)
+- **Product:** Fresh vegetables (all types) + organic options available
+- **Supplier:** Greens Supermarket - Leading Malta supermarket chain
+- **Location:** 7 locations (Swieqi, Mriehel, Qormi, Sliema, St. Julian's, Naxxar, Gozo)
+- **Links:** 
+  - Website: https://www.greens.com.mt/
+  - Instagram: https://www.instagram.com/greenssupermarket/
+- **Price:** Competitive retail (slightly higher than market, but organized pricing)
+  - Carrots: €0.90-1.20/kg (bundled)
+  - Cabbage: €0.80-1.00/piece
+  - Beets: €1.30-1.50/kg
+  - Tomatoes: €1.80-2.20/kg
+  - Herbs: €1.50-2.50/bunch
+- **Bulk price (20kg vegetables + herbs):** €25-35 total
+- **Delivery:** YES - online ordering + home delivery to your address
+- **Timeframe:** 1-2 days (order online, delivery next day)
+- **Pros:** ✅ Multiple locations (convenient), ✅ Online ordering (easy), ✅ Home delivery (saves time), ✅ Organized selection, ✅ Organic options
+- **Cons:** ⚠️ Slightly pricier than markets (€25-35 vs €20-25), ❌ Less negotiation (fixed prices)
+
 ### Option C: **Farmer's Deli Malta** (Organic certified online delivery)
 - **Product:** Certified organic vegetable boxes (curated selection)
 - **Supplier:** Farmer's Deli Malta
@@ -102,21 +121,47 @@
 
 ---
 
-## ✅ RECOMMENDATION: **Option A (Valletta Market)**
+## 🔴 RECOMMENDATION: **OPTIONS A vs B (Your Choice)**
 
-**Why:**
-- ✅ CHEAPEST (€20-25 vs €22-28 vs €110-145)
-- ✅ FRESHEST (direct from local farmers)
-- ✅ Support local (traditional market)
-- ✅ Best for test batch (can pick & choose)
-- ✅ Zero shipping cost
+### **Option A: Valletta Market** (Best for personal shopping)
+- ✅ CHEAPEST (€20-25)
+- ✅ FRESHEST (direct from farmers)
+- ✅ Support local
+- ✅ Can pick & choose
+- ❌ Manual shopping (time-consuming)
+
+**Action:** Go Sat/Sun 08:00-11:00, negotiate bulk
+
+---
+
+### **Option B: Greens Supermarket** (Best for convenience)
+- ✅ CONVENIENT (online ordering, home delivery)
+- ✅ RELIABLE (organized, multiple locations)
+- ✅ FAST (1-2 day delivery)
+- ✅ ORGANIZED (no hunting for items)
+- ✅ FLEXIBLE (order from couch)
+- ⚠️ SLIGHTLY PRICIER (€25-35 vs €20-25)
 
 **Action:** 
-- Go Sat or Sun morning (08:00-11:00)
-- Bring bags/cooler
-- Negotiate bulk discount ("20kg for €20")
-- Pick: carrots, cabbage, beets, tomatoes, fennel, peppers
-- Take home same day
+1. Visit https://www.greens.com.mt/
+2. Create account
+3. Add to cart: carrots 2kg, cabbage 2, beets 2kg, tomatoes 3kg, fennel 1, herbs
+4. Choose delivery address
+5. Pay online
+6. Receive next day (2-day wait = bottles arrive from Beleaf.mt on Day 3 anyway)
+
+---
+
+**MY HONEST TAKE:**
+- If you **have time** → Option A (save €5-10, support local)
+- If you **prefer convenience** → Option B (save time, reliable delivery)
+- If you **want hybrid** → Use Greens for vegetables + Valletta for special herbs/negotiation
+
+**For €500 budget test:** I'd recommend **Option B (Greens)** because:
+1. Online ordering = no stress
+2. Home delivery = more time for production
+3. Reliable quality = consistent fermentation
+4. Extra €5-10 cost is worth efficiency
 
 ---
 
@@ -296,37 +341,55 @@
 | Item | Recommended Supplier | Cost | Link | Notes |
 |---|---|---|---|---|
 | Glass Jars (100) | Beleaf.mt | €45-90 | https://beleaf.mt | LOCAL, cheapest |
-| Fresh Vegetables (20kg) | Valletta Market | €20-25 | Sat-Sun, walk-in | LOCAL, freshest |
-| Salt & Spices (2-3kg) | Local Markets | €15-20 | Multiple suppliers | LOCAL, fresh |
+| Fresh Vegetables (20kg) | **Greens Supermarket** OR Valletta Market | €20-35 | https://www.greens.com.mt/ | LOCAL, convenient (Greens) or cheapest (Market) |
+| Salt & Spices (2-3kg) | Greens Supermarket OR Local Markets | €15-25 | https://www.greens.com.mt/ | LOCAL, fresh |
 | Label Design | Canva Pro | €10 | https://www.canva.com/pro | DIY, easy |
 | Label Printing (100) | Polidano Press | €40-60 | https://www.pplmalta.com | LOCAL, professional |
-| **TOTAL** | | **€130-205** | All Malta suppliers | ✅ Fits €500 budget! |
+| **TOTAL** | | **€130-210** | All Malta suppliers | ✅ Fits €500 budget! |
 
 ---
 
 ## BUFFER REMAINING
 
 - Total budget: €500
-- Total cost: €130-205
-- **Remaining buffer: €295-370** ✅✅
+- Total cost (with Greens): €130-210
+- **Remaining buffer: €290-370** ✅✅
 
 Can allocate extra to:
+- Marketing (Instagram ads + influencers): €120-180
 - Booth rental at markets (Marsaxlokk/Valletta): €30-50/week
-- Better packaging (padded boxes): €30-50
-- Extra ingredient quantity: €50+
-- Advertising/Instagram content: €100+
+- Extra packaging (padded boxes for shipping): €30-50
+- Extra ingredient quantity (second batch prep): €50+
+- Contingency/emergencies: €50+
 
 ---
 
 ## NEXT STEPS
 
-1. 🔴 **Approve Malta-only suppliers** (confirm A/A/A/A/A recommendations)
-2. 📋 **Order jars from Beleaf.mt** (2-3 days delivery)
-3. 🌱 **Buy vegetables from Valletta Market** (Sat-Sun morning)
-4. 🏷️ **Design labels in Canva** (2-3 hours)
-5. 🎨 **Order printing from Polidano Press** (5-7 days)
-6. 🧂 **Gather spices from local markets** (parallel task)
+1. 🔴 **Approve suppliers:**
+   - Jars: Beleaf.mt ✅
+   - Vegetables: **Greens Supermarket** OR Valletta Market (YOUR CHOICE)
+   - Spices: **Greens OR Local Markets**
+   
+2. 📋 **If choosing Greens:**
+   - Visit https://www.greens.com.mt/
+   - Create online account
+   - Add vegetables to cart
+   - Order for next-day delivery
+   
+3. 📋 **If choosing Valletta:**
+   - Go Sat/Sun morning 08:00-11:00
+   - Negotiate bulk pricing
+   - Bring cooler/bags
+
+4. 📦 **Order jars from Beleaf.mt** (2-3 days delivery)
+
+5. 🏷️ **Design labels in Canva** (2-3 hours)
+
+6. 🎨 **Order printing from Polidano Press** (5-7 days)
+
+7. 📊 **Execute marketing plan** (Instagram ads, influencers, market booth)
 
 ---
 
-**Status:** 🟢 ALL MALTA-BASED SUPPLIERS VERIFIED | No international shipping needed | Budget: €130-205
+**Status:** 🟢 GREENS SUPERMARKET ADDED as vegetable/spice supplier | Option A (Market) vs Option B (Greens) | Budget: €130-210
