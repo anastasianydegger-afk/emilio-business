@@ -8,15 +8,15 @@
 
 | # | Task | Cost | Free Alternative | Priority | Notes |
 |---|------|------|-----------------|----------|-------|
-| 1 | **Glass jars** (330ml + 500ml, 100 pcs total) | €120 | Used jars from Facebook Marketplace | HIGH | Local suppliers: Beleaf.mt, Ta-Malta; EU purchase via Alibaba/Etsy |
-| 2 | **Fresh vegetables** (for 8-10 SKUs, test batches 1-2kg each) | €80 | Valletta Market or Marsaxlokk Market (sale prices) | HIGH | Fennel, cabbage, carrots, tomatoes + new ones (from BLOCK 1) |
-| 3 | **Salt, spices, herbs** (sea salt, garlic, herbs, seasonings) | €35 | Home pantry / local market | HIGH | 2-3kg of various ingredients |
-| 4 | **Labels** (temporary stickers for testing) | €50 | Print at home on office paper + tape | MEDIUM | Option 1: Order 100 stickers on Etsy (€40-50). Option 2: Home print on Dymo (€0 + 15 min) |
+| 1 | **Glass jars** (330ml + 500ml, 100 pcs total) | €125-135 | BottleStore.com wholesale + shipping | HIGH | ✅ See SHOPPING_LIST.md for 3 options & prices |
+| 2 | **Fresh vegetables** (for 8-10 SKUs, test batches 1-2kg each) | €20-25 | Valletta Market (Sat-Sun) local pickup | HIGH | ✅ See SHOPPING_LIST.md for 3 options & prices |
+| 3 | **Salt, spices, herbs** (sea salt, garlic, herbs, seasonings) | €15-20 | Local markets (Valletta, Marsaxlokk) | HIGH | ✅ See SHOPPING_LIST.md for 3 options & prices |
+| 4 | **Labels** (professional stickers for jars, 100 pcs) | €35-50 | Sticker Mule EU (free shipping) | MEDIUM | ✅ See BRANDING_OPTIONS.md for 3 printing services |
 | 5 | **Brand design** (naming, logo, visualization) | €0 | **Built into BLOCK 2** (my analysis) | MEDIUM | No payment needed — I do web_search + conceptualization |
 | 6 | **Photography for Instagram** | €0 | Smartphone (iPhone/Android) + natural light | MEDIUM | Or hire photographer €60-100 (outside budget) |
-| 7 | **Delivery / Packaging materials** (cardboard, bubble wrap, tape) | €40 | Personal handover / reuse boxes | LOW | If planning mail shipments |
-| 8 | **Contingency / Buffer** | €75 | Cost optimization via bulk purchases | LOW | Emergency needs, additional ingredients |
-| | **TOTAL** | **€400** | **~€100-150** (frugal option) | | **Within €500 budget** ✅ |
+| 7 | **Delivery / Packaging materials** (cardboard, bubble wrap, tape) | €30-40 | Reuse boxes, local store | LOW | If planning mail shipments |
+| 8 | **Contingency / Buffer** | €50-75 | Cost optimization via bulk purchases | LOW | Emergency needs, additional ingredients |
+| | **TOTAL (NEW ESTIMATES)** | **€275-320** | **Real suppliers, verified links** | | **Well under €500 budget** ✅✅ |
 
 ---
 
@@ -67,7 +67,21 @@
 
 **STATUS:** ⏳ Waiting for your OK on budget
 
-**QUESTIONS FOR YOU:**
-1. Is €400 standard OK, or do you prefer to economize?
-2. Will you sell online (need shipping €40) or local only (no shipping)?
-3. Do you have used glass jars at home? If yes, we save €80-100.
+---
+
+## REAL SUPPLIER DETAILS
+
+For specific supplier options, prices, and links → see:
+- **SHOPPING_LIST.md** — Glass jars, vegetables, salt & spices, labels (3 options each)
+- **BRANDING_OPTIONS.md** — Design & printing services (Canva, Fiverr, Local shops)
+
+---
+
+**BUDGET STATUS:** 
+- Original estimate: €400
+- New real-supplier estimate: €275-320
+- **SAVINGS: €80-125** ✅
+- **Remaining buffer: €180-225** for contingency or advertising
+
+**NEXT STEP:** 
+Approve your preferences from SHOPPING_LIST.md + BRANDING_OPTIONS.md → I'll place orders!
