@@ -1,71 +1,73 @@
 # COST ESTIMATE — Fermented Vegetables Test Run (€500 Budget)
 
-**Target:** Launch 8-10 SKU на Мальте, тест-серия, Instagram-worthy, стекло 330мл + 500мл
+**Target:** Launch 8-10 SKUs in Malta, test batch, Instagram-worthy, glass jars (330ml & 500ml)
 
 ---
 
-## СМЕТА ПО ЭТАПАМ
+## BUDGET BREAKDOWN BY TASK
 
-| # | Задача | Стоимость | Бесплатная альтернатива | Приоритет | Примечание |
-|---|--------|-----------|------------------------|-----------|-----------|
-| 1 | **Стеклянные банки** (330мл + 500мл, 100 шт total) | €120 | Б/у банки на Facebook Marketplace | HIGH | Местные поставщики: Beleaf.mt, Ta-Malta; EU покупка через Alibaba/Etsy |
-| 2 | **Овощи** (свежие для 8-10 SKU, тест-партии 1-2 кг каждая) | €80 | Местный рынок на распродажу (Mercato или Valletta) | HIGH | Фенхель, капуста, морковь, помидоры + новые (из БЛОК 1) |
-| 3 | **Соль, специи, приправы** (морская соль, чеснок, зелень, пряности) | €35 | Домашние запасы / местный рынок | HIGH | 2-3 кг различных ингредиентов |
-| 4 | **Этикетки** (временные наклейки для тестирования) | €50 | Распечатать дома на офисной бумаге + скотч | MEDIUM | Вариант 1: заказ 100 наклеек на Etsy (€40-50). Вариант 2: домашняя печать на Dymo (€0 + 15 мин) |
-| 5 | **Дизайн бренда** (нейминг, логотип, визуализация) | €0 | **Встроено в БЛОК 2** (мой анализ) | MEDIUM | Тебе не платить — я做 web_search + концептуализацию |
-| 6 | **Фотосъёмка для Instagram** | €0 | Смартфон (iPhone/Android) + естественный свет | MEDIUM | Или нанять фотографа €60-100 (не входит в смету) |
-| 7 | **Доставка / Упаковка материалы** (картон, пузыри, скотч) | €40 | Личная раздача / переиспользование коробок | LOW | Если планируешь отправлять по почте |
-| 8 | **Непредвиденные расходы** (буфер) | €75 | Минимизация через опт-закупки | LOW | Экстренные нужды, доп. ингредиенты |
-| | **TOTAL** | **€400** | **~€100-150** (скупой вариант) | | **В рамках €500** ✅ |
-
----
-
-## РАЗБОР ПО ВАРИАНТАМ
-
-### 🟢 СТАНДАРТ (€400) — Рекомендую
-- ✅ Стекло + овощи + ингредиенты = основа
-- ✅ Профессиональные этикетки
-- ✅ Упаковка для доставки
-- ✅ Буфер для непредвиденных
-- **Результат:** 100+ готовых банок, 8-10 SKU, Instagram-ready
-
-### 🟡 ЭКОНОМНЫЙ (€250-300)
-- ✅ Стекло + овощи + ингредиенты
-- 🟡 Домашняя печать этикеток
-- ❌ Без упаковки / только личная раздача
-- **Результат:** 100+ банок, но сложнее с продажей/доставкой
-
-### 🔴 МИНИМУМ (€100-150) — Не рекомендую для продаж
-- ✅ Б/у банки + овощи + ингредиенты
-- ❌ Никаких этикеток / домашние наклейки
-- ❌ Без упаковки
-- **Результат:** Прототип для друзей, не для рынка
+| # | Task | Cost | Free Alternative | Priority | Notes |
+|---|------|------|-----------------|----------|-------|
+| 1 | **Glass jars** (330ml + 500ml, 100 pcs total) | €120 | Used jars from Facebook Marketplace | HIGH | Local suppliers: Beleaf.mt, Ta-Malta; EU purchase via Alibaba/Etsy |
+| 2 | **Fresh vegetables** (for 8-10 SKUs, test batches 1-2kg each) | €80 | Valletta Market or Marsaxlokk Market (sale prices) | HIGH | Fennel, cabbage, carrots, tomatoes + new ones (from BLOCK 1) |
+| 3 | **Salt, spices, herbs** (sea salt, garlic, herbs, seasonings) | €35 | Home pantry / local market | HIGH | 2-3kg of various ingredients |
+| 4 | **Labels** (temporary stickers for testing) | €50 | Print at home on office paper + tape | MEDIUM | Option 1: Order 100 stickers on Etsy (€40-50). Option 2: Home print on Dymo (€0 + 15 min) |
+| 5 | **Brand design** (naming, logo, visualization) | €0 | **Built into BLOCK 2** (my analysis) | MEDIUM | No payment needed — I do web_search + conceptualization |
+| 6 | **Photography for Instagram** | €0 | Smartphone (iPhone/Android) + natural light | MEDIUM | Or hire photographer €60-100 (outside budget) |
+| 7 | **Delivery / Packaging materials** (cardboard, bubble wrap, tape) | €40 | Personal handover / reuse boxes | LOW | If planning mail shipments |
+| 8 | **Contingency / Buffer** | €75 | Cost optimization via bulk purchases | LOW | Emergency needs, additional ingredients |
+| | **TOTAL** | **€400** | **~€100-150** (frugal option) | | **Within €500 budget** ✅ |
 
 ---
 
-## КЛЮЧЕВЫЕ ПРЕДПОЛОЖЕНИЯ
+## BUDGET OPTIONS
 
-1. **Локация:** Мальта → доступ к местным овощам + EU онлайн-поставщики
-2. **Объём тестирования:** ~100 банок (=8-10 SKU × 10-15 банок каждая)
-3. **Хранение:** Дома (холодильник / прохладное место) = бесплатно
-4. **Продажа:** Онлайн (Instagram) + местная раздача
-5. **Маржа:** 300-400% (себестоимость €0.80-1.50 → цена €3-5 за банку)
+### 🟢 STANDARD (€400) — Recommended
+- ✅ Glass + vegetables + ingredients = foundation
+- ✅ Professional labels
+- ✅ Shipping packaging
+- ✅ Contingency buffer
+- **Result:** 100+ finished jars, 8-10 SKUs, Instagram-ready
+
+### 🟡 ECONOMICAL (€250-300)
+- ✅ Glass + vegetables + ingredients
+- 🟡 Home-printed labels
+- ❌ No packaging / local delivery only
+- **Result:** 100+ jars, but harder to sell/ship
+
+### 🔴 MINIMUM (€100-150) — NOT Recommended for sales
+- ✅ Used jars + vegetables + ingredients
+- ❌ No labels / homemade stickers
+- ❌ No packaging
+- **Result:** Prototype for friends, not market-ready
 
 ---
 
-## СЛЕДУЮЩИЕ ШАГИ (ПОСЛЕ ТА ОДОБРЕНИЯ СМЕТЫ)
+## KEY ASSUMPTIONS
 
-✅ **БЛОК 1:** Выбор овощей (web_search) + рецептуры (PRODUCT_LINE.md)
-✅ **БЛОК 2:** Нейминг (15-20 вариантов) + брендинг (BRAND_IDENTITY.md)
-✅ **БЛОК 3:** Покупка материалов + первая партия
-✅ **БЛОК 4:** Фотосъёмка + Instagram контент
-✅ **БЛОК 5:** Мягкий запуск (друзья, локальные группы)
+1. **Location:** Malta → access to local vegetables + EU online suppliers
+2. **Test volume:** ~100 jars (= 8-10 SKUs × 10-15 jars each)
+3. **Storage:** Home (refrigerator / cool place) = free
+4. **Sales channels:** Online (Instagram) + local distribution
+5. **Margin:** 300-400% (COGS €0.80-1.50 → retail price €3-5/jar)
 
 ---
 
-**СТАТУС:** ⏳ Ожидание твоего ОК на смету
+## NEXT STEPS (AFTER YOUR APPROVAL)
 
-**ВОПРОСЫ ДЛЯ ТЕБЯ:**
-1. Согласна с €400 на стандарт или хочешь экономить?
-2. Планируешь продавать онлайн (нужна упаковка) или только локально (личная раздача)?
-3. Есть ли дома б/у стеклянные банки? Если да, можем сэкономить €80-100.
+✅ **BLOCK 1:** Choose vegetables (web_search) + recipes (PRODUCT_LINE.md)
+✅ **BLOCK 2:** Naming (15-20 variants) + branding (BRAND_IDENTITY.md)
+✅ **BLOCK 3:** Market research (competitors, vendors, regulations)
+✅ **BLOCK 4:** Legal requirements (food safety, labeling)
+✅ **BLOCK 5:** Sales funnel (influencers, Instagram ads, conversion)
+✅ **BLOCK 6:** GitHub Pages landing page
+✅ **BLOCK 7:** Launch plan (4-week timeline + checklist)
+
+---
+
+**STATUS:** ⏳ Waiting for your OK on budget
+
+**QUESTIONS FOR YOU:**
+1. Is €400 standard OK, or do you prefer to economize?
+2. Will you sell online (need shipping €40) or local only (no shipping)?
+3. Do you have used glass jars at home? If yes, we save €80-100.
