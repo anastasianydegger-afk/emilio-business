@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦀 Job Filter</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; color: #333; padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { margin-bottom: 40px; text-align: center; }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .subtitle { font-size: 14px; color: #999; }
+        .stats { display: flex; gap: 40px; justify-content: center; margin-top: 20px; font-size: 14px; }
+        .stat-number { font-weight: 600; margin-right: 8px; }
+        .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+        .job-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+        .job-title { font-size: 18px; font-weight: 600; }
+        .job-company { font-size: 14px; color: #999; }
+        .job-score { display: inline-block; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+        .detail { display: flex; flex-direction: column; gap: 4px; }
+        .detail-label { font-size: 11px; color: #999; text-transform: uppercase; font-weight: 500; }
+        .detail-value { font-size: 14px; }
+        .btn { padding: 10px 16px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; margin-right: 8px; background: white; }
+        .btn:hover { border-color: #333; }
+        .btn-huntr { background: #0066cc; color: white; border-color: #0066cc; }
+        .btn-huntr:hover { background: #0052a3; }
+        .btn-reject { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
+        .btn-reject:hover { background: #ffcdd2; }
+        .rejected { opacity: 0.5; }
+        .badge-red { color: #c62828; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦀 Job Filter App</h1>
+            <p class="subtitle">Review & filter positions</p>
+            <div class="stats">
+                <div><span class="stat-number" id="total">2</span>Total</div>
+                <div><span class="stat-number" id="active">2</span>Active</div>
+                <div><span class="stat-number" id="rejected">0</span>Rejected</div>
+            </div>
+        </header>
+
+        <!-- Job 1 -->
+        <div class="job-card" id="job-1">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Jua</div>
+                    <div class="job-company">Chief of Staff</div>
+                </div>
+                <div class="job-score" style="background: #e8f5e9; color: #2e7d32;">88/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Hybrid (flexible)</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3-5 years</div></div>
+                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">Feb 15, 2026</div></div>
+                <div class="detail"><div class="detail-label">Category</div><div class="detail-value">GREEN ✅</div></div>
+            </div>
+            <div>
+                <button class="btn btn-huntr" onclick="addToHuntr('Jua', 'Chief of Staff')">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(1)">✕ Reject</button>
+            </div>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="job-card" id="job-2" class="rejected">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Revizto</div>
+                    <div class="job-company">Sr. Manager GTM Strategy</div>
+                </div>
+                <div class="job-score" style="background: #ffebee; color: #c62828;">REJECTED</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value"><span class="badge-red">❌ Remote (UK, Germany, France, Spain)</span></div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">8-12 years</div></div>
+                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">Unspecified</div></div>
+                <div class="detail"><div class="detail-label">Reason</div><div class="detail-value">Requires specific country location</div></div>
+              </div>
+            <div style="font-size: 12px; color: #999;">
+                ❌ Rejected: Requires employee to be in UK/Germany/France/Spain. Настя is in Malta/Switzerland.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addToHuntr(company, title) {
+            alert(`✅ Adding "${title}" at ${company} to Huntr...\n\nIn production: integration with Huntr API`);
+        }
+
+        function rejectJob(jobId) {
+            const card = document.getElementById(`job-${jobId}`);
+            card.classList.add('rejected');
+            document.getElementById('active').textContent = parseInt(document.getElementById('active').textContent) - 1;
+            document.getElementById('rejected').textContent = parseInt(document.getElementById('rejected').textContent) + 1;
+        }
+    </script>
+</body>
+</html>
