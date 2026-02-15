@@ -13,15 +13,20 @@
         .subtitle { font-size: 14px; color: #999; }
         .stats { display: flex; gap: 40px; justify-content: center; margin-top: 20px; font-size: 14px; }
         .stat-number { font-weight: 600; margin-right: 8px; }
-        .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+        .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 24px; margin-bottom: 20px; transition: opacity 0.3s; }
         .job-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
         .job-title { font-size: 18px; font-weight: 600; }
         .job-company { font-size: 14px; color: #999; }
         .job-score { display: inline-block; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .job-score.green { background: #e8f5e9; color: #2e7d32; }
+        .job-score.yellow { background: #fff3e0; color: #e65100; }
+        .job-score.red { background: #ffebee; color: #c62828; }
         .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
         .detail { display: flex; flex-direction: column; gap: 4px; }
         .detail-label { font-size: 11px; color: #999; text-transform: uppercase; font-weight: 500; }
         .detail-value { font-size: 14px; }
+        .detail-value a { color: #0066cc; text-decoration: none; }
+        .detail-value a:hover { text-decoration: underline; }
         .btn { padding: 10px 16px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; margin-right: 8px; background: white; }
         .btn:hover { border-color: #333; }
         .btn-huntr { background: #0066cc; color: white; border-color: #0066cc; }
@@ -30,28 +35,81 @@
         .btn-reject:hover { background: #ffcdd2; }
         .rejected { opacity: 0.5; }
         .badge-red { color: #c62828; font-weight: 600; }
+        .source { font-size: 11px; color: #ccc; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Review & filter positions</p>
+            <p class="subtitle">Review & filter positions — Feb 15, 2026</p>
             <div class="stats">
-                <div><span class="stat-number" id="total">2</span>Total</div>
-                <div><span class="stat-number" id="active">2</span>Active</div>
+                <div><span class="stat-number" id="total">4</span>Total</div>
+                <div><span class="stat-number" id="active">4</span>Active</div>
                 <div><span class="stat-number" id="rejected">0</span>Rejected</div>
             </div>
         </header>
 
-        <!-- Job 1 -->
+        <!-- Job 1: Revolut -->
         <div class="job-card" id="job-1">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Revolut</div>
+                    <div class="job-company">Strategy & Operations Manager</div>
+                </div>
+                <div class="job-score yellow">82/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Switzerland</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Unspecified (CH-based)</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3+ years</div></div>
+                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">Unspecified</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">~1 week ago</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series E (fintech)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Operations (no SQL/coding required)</div></div>
+                <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://ch.linkedin.com/jobs/view/strategy-operations-manager-at-revolut-4359225027" target="_blank">View Job →</a></div></div>
+            </div>
+            <div>
+                <button class="btn btn-huntr" onclick="addToHuntr('Revolut', 'Strategy & Operations Manager')">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(1)">✕ Reject</button>
+            </div>
+            <div class="source">Source: ChatGPT + LinkedIn</div>
+        </div>
+
+        <!-- Job 2: True Wealth -->
+        <div class="job-card" id="job-2">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">True Wealth AG</div>
+                    <div class="job-company">Founder's Associate (Temp, 40-60%)</div>
+                </div>
+                <div class="job-score yellow">78/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Not specified</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">>2 years</div></div>
+                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">Unspecified</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">~3 weeks ago</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A (fintech)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Exec support + Ops (no SQL/coding)</div></div>
+                <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://ch.linkedin.com/jobs/view/founder%E2%80%99s-associate-temporary-40%E2%80%9360%25-at-true-wealth-4354079655" target="_blank">View Job →</a></div></div>
+            </div>
+            <div>
+                <button class="btn btn-huntr" onclick="addToHuntr('True Wealth AG', 'Founder\'s Associate')">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(2)">✕ Reject</button>
+            </div>
+            <div class="source">Source: ChatGPT + LinkedIn (Series A via Tracxn)</div>
+        </div>
+
+        <!-- Job 3: Jua (Gemini) -->
+        <div class="job-card" id="job-3">
             <div class="job-header">
                 <div>
                     <div class="job-title">Jua</div>
                     <div class="job-company">Chief of Staff</div>
                 </div>
-                <div class="job-score" style="background: #e8f5e9; color: #2e7d32;">88/100</div>
+                <div class="job-score green">88/100</div>
             </div>
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland</div></div>
@@ -59,23 +117,25 @@
                 <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3-5 years</div></div>
                 <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
                 <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">Feb 15, 2026</div></div>
-                <div class="detail"><div class="detail-label">Category</div><div class="detail-value">GREEN ✅</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A+ (AI/SaaS)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Strategy + operations</div></div>
                 <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://example.com/jua-cos" target="_blank">View Job →</a></div></div>
             </div>
             <div>
                 <button class="btn btn-huntr" onclick="addToHuntr('Jua', 'Chief of Staff')">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(1)">✕ Reject</button>
+                <button class="btn btn-reject" onclick="rejectJob(3)">✕ Reject</button>
             </div>
+            <div class="source">Source: Gemini</div>
         </div>
 
-        <!-- Job 2 -->
-        <div class="job-card" id="job-2" class="rejected">
+        <!-- Job 4: Revizto (Brave - REJECTED) -->
+        <div class="job-card rejected" id="job-4">
             <div class="job-header">
                 <div>
                     <div class="job-title">Revizto</div>
-                    <div class="job-company">Sr. Manager GTM Strategy</div>
+                    <div class="job-company">Sr. Manager GTM Strategy & Operations</div>
                 </div>
-                <div class="job-score" style="background: #ffebee; color: #c62828;">REJECTED</div>
+                <div class="job-score red">REJECTED</div>
             </div>
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote</div></div>
@@ -83,12 +143,15 @@
                 <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">8-12 years</div></div>
                 <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">Unspecified</div></div>
                 <div class="detail"><div class="detail-label">Reason</div><div class="detail-value">Requires specific country location</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series B+ (SaaS)</div></div>
                 <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://remotive.com/remote/jobs/sales-business/sr-manager-gtm-strategy-operations-3614433" target="_blank">View Job →</a></div></div>
-              </div>
-            <div style="font-size: 12px; color: #999;">
-                ❌ Rejected: Requires employee to be in UK/Germany/France/Spain. Настя is in Malta/Switzerland.
             </div>
+            <div style="font-size: 12px; color: #999;">
+                ❌ Rejected: "Remote (UK, Germany, France, Spain)" = requires employee to be in one of those countries. Настя is in Malta/Switzerland.
+            </div>
+            <div class="source">Source: Brave</div>
         </div>
+
     </div>
 
     <script>
