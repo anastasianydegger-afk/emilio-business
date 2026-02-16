@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="build-date" content="2026-02-16T14:42:00Z">
-    <meta name="version" content="3.4-rejected-fixed">
+    <meta name="build-date" content="2026-02-16T14:44:00Z">
+    <meta name="version" content="3.5-new-filters">
     <title>🦀 Job Filter</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -87,7 +87,7 @@
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Feb 16, 2026 14:42 UTC — v3.4 with Rejected Positions Fixed + Cache Buster</p>
+            <p class="subtitle">Feb 16, 2026 14:44 UTC — v3.5 with New Filter Logic: Новые → Интересно → Отклонено</p>
             <div class="stats">
                 <div><span class="stat-number">20</span>Total</div>
                 <div><span class="stat-number">0</span>🟢 GREEN</div>
@@ -98,13 +98,12 @@
         </header>
 
         <div class="filters">
-            <button class="filter-btn active" onclick="filterJobs('all')">All</button>
-            <button class="filter-btn" onclick="filterJobs('green')">🟢 GREEN</button>
+            <button class="filter-btn active" onclick="filterJobs('new')">🆕 Новые</button>
+            <button class="filter-btn" onclick="filterJobs('interested')">❤️ Интересно</button>
+            <button class="filter-btn" onclick="filterJobs('rejected')">❌ Отклонено</button>
+            <button class="filter-btn" onclick="filterJobs('green')" style="margin-left: 20px;">🟢 GREEN</button>
             <button class="filter-btn" onclick="filterJobs('yellow')">🟡 YELLOW</button>
             <button class="filter-btn" onclick="filterJobs('pending')">🔵 Validating</button>
-            <button class="filter-btn" onclick="filterJobs('linkedin')">💼 LinkedIn</button>
-            <button class="filter-btn" onclick="filterJobs('saved')">💾 Saved</button>
-            <button class="filter-btn" onclick="filterJobs('rejected')">❌ Rejected</button>
             <button class="filter-btn" onclick="exportToChat()" style="background:#f5f5f5;border-color:#ddd;margin-left:auto;">📋 Export</button>
         </div>
 
@@ -509,8 +508,8 @@
 
     <script>
         // ===== AGGRESSIVE CACHE BUSTER =====
-        const CURRENT_VERSION = '3.4-rejected-fixed';
-        const LAST_BUILD = '2026-02-16T14:42:00Z';
+        const CURRENT_VERSION = '3.5-new-filters';
+        const LAST_BUILD = '2026-02-16T14:44:00Z';
         const storedVersion = localStorage.getItem('emilio_app_version');
         
         if (storedVersion !== CURRENT_VERSION) {
@@ -703,18 +702,25 @@
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             document.querySelectorAll('.job-card').forEach(card => {
-                if (type === 'all') { 
-                    card.classList.remove('hidden'); 
-                    return; 
-                }
-                if (type === 'rejected') {
-                    card.classList.toggle('hidden', !card.classList.contains('rejected'));
-                } else if (type === 'linkedin') {
-                    card.classList.toggle('hidden', card.dataset.source !== 'linkedin');
-                } else if (type === 'saved') {
-                    card.classList.toggle('hidden', card.dataset.source !== 'saved');
-                } else {
-                    card.classList.toggle('hidden', card.dataset.score !== type);
+                const key = card.dataset.key;
+                const isRejected = card.classList.contains('rejected') || rejections[key];
+                const isInterested = interests[key];
+                
+                if (type === 'new') { 
+                    // New = not rejected, not interested
+                    card.classList.toggle('hidden', isRejected || isInterested);
+                } else if (type === 'interested') {
+                    // Interested = saved by user
+                    card.classList.toggle('hidden', !isInterested);
+                } else if (type === 'rejected') {
+                    // Rejected = rejected by user
+                    card.classList.toggle('hidden', !isRejected);
+                } else if (type === 'green') {
+                    card.classList.toggle('hidden', card.dataset.score !== 'green');
+                } else if (type === 'yellow') {
+                    card.classList.toggle('hidden', card.dataset.score !== 'yellow');
+                } else if (type === 'pending') {
+                    card.classList.toggle('hidden', card.dataset.score !== 'pending');
                 }
             });
             document.querySelectorAll('.section-title').forEach(title => {
