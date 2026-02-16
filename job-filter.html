@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="build-date" content="2026-02-16T14:44:00Z">
-    <meta name="version" content="3.5-new-filters">
+    <meta name="build-date" content="2026-02-16T14:50:00Z">
+    <meta name="version" content="3.6-new-structure">
     <title>🦀 Job Filter</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,848 +18,265 @@
         .subtitle { font-size: 13px; color: #999; }
         .stats { display: flex; gap: 30px; justify-content: center; margin-top: 16px; font-size: 13px; }
         .stat-number { font-weight: 600; margin-right: 6px; }
-        .filters { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; align-items: center; }
-        .filter-btn { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 12px; cursor: pointer; background: white; transition: all 0.2s; }
+        .filters { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; cursor: pointer; background: white; transition: all 0.2s; font-weight: 500; }
         .filter-btn:hover { border-color: #333; }
         .filter-btn.active { background: #333; color: white; border-color: #333; }
-        .date-badge { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 6px; }
-        .date-badge.old { background: #f5f5f5; color: #999; }
-        .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 16px; transition: opacity 0.3s; }
+        .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
         .job-header { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: flex-start; }
         .job-title { font-size: 16px; font-weight: 600; }
-        .job-company { font-size: 13px; color: #999; }
-        .job-link { font-size: 12px; color: #0066cc; font-weight: 500; margin-top: 4px; }
+        .job-company { font-size: 13px; color: #666; margin-top: 4px; }
+        .job-link { font-size: 12px; color: #0066cc; margin-top: 4px; }
         .job-link a { color: #0066cc; text-decoration: none; }
         .job-link a:hover { text-decoration: underline; }
-        .job-score { display: inline-block; background: #f0f0f0; padding: 4px 10px; border-radius: 16px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+        .job-score { display: inline-block; background: #f0f0f0; padding: 4px 10px; border-radius: 16px; font-size: 11px; font-weight: 600; }
         .job-score.green { background: #e8f5e9; color: #2e7d32; }
         .job-score.yellow { background: #fff3e0; color: #e65100; }
-        .job-score.red { background: #ffebee; color: #c62828; }
-        .job-score.pending { background: #e3f2fd; color: #1565c0; }
-        .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+        .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
         .detail { display: flex; flex-direction: column; gap: 2px; }
         .detail-label { font-size: 10px; color: #999; text-transform: uppercase; font-weight: 500; }
         .detail-value { font-size: 13px; }
-        .warning { font-size: 11px; color: #e65100; margin-top: 6px; padding: 6px 10px; background: #fff3e0; border-radius: 6px; }
-        .rejected { opacity: 0.25; }
-        .hidden { display: none; }
-        .actions { margin-top: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .warning { font-size: 11px; color: #e65100; margin: 8px 0; padding: 8px 12px; background: #fff3e0; border-radius: 6px; }
+        .hidden { display: none !important; }
+        .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
         .btn { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; background: white; }
         .btn:hover { border-color: #333; }
-        .btn-reject { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
-        .btn-reject:hover { background: #ffcdd2; }
         .btn-save { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
         .btn-save:hover { background: #c8e6c9; }
-        .btn-validate { background: #e8eaf6; color: #3f51b5; border-color: #c5cae9; }
-        .btn-validate:hover { background: #c5cae9; }
-        .btn-apply { background: #c8e6c9; color: #2e7d32; border-color: #a5d6a7; }
-        .btn-apply:hover { background: #a5d6a7; }
-        .btn-apply:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
-        .btn-apply.applying { background: #81c784; animation: pulse 1s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .validate-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-        .validate-modal.show { display: flex; }
-        .validate-modal-content { background: white; padding: 24px; border-radius: 8px; width: 90%; max-width: 400px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-        .validate-modal h2 { margin-bottom: 16px; font-size: 16px; }
-        .validate-modal p { margin-bottom: 12px; font-size: 12px; color: #666; }
-        .validate-modal-buttons { display: flex; gap: 8px; margin-top: 16px; }
-        .validate-modal-buttons button { flex: 1; padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; cursor: pointer; }
-        .validate-modal-buttons button.open { background: #e3f2fd; color: #1565c0; border-color: #bbdefb; }
-        .validate-modal-buttons button.open:hover { background: #bbdefb; }
-        .validate-modal-buttons button.valid { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
-        .validate-modal-buttons button.valid:hover { background: #c8e6c9; }
-        .validate-modal-buttons button.closed { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
-        .validate-modal-buttons button.closed:hover { background: #ffcdd2; }
-        .validate-modal-buttons button.unclear { background: #fff3e0; color: #e65100; border-color: #ffe0b2; }
-        .validate-modal-buttons button.unclear:hover { background: #ffe0b2; }
-        .comment-box { display: none; margin-top: 8px; width: 100%; }
-        .comment-box.show { display: flex; gap: 8px; }
+        .btn-reject { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
+        .btn-reject:hover { background: #ffcdd2; }
+        .reject-reason { font-size: 12px; color: #c62828; margin-top: 8px; padding: 8px 12px; background: #ffebee; border-radius: 6px; font-weight: 500; }
+        .comment-box { display: none; margin-top: 8px; gap: 8px; width: 100%; }
+        .comment-box.show { display: flex; }
         .comment-box input { flex: 1; padding: 6px 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; }
         .comment-box button { padding: 6px 12px; background: #c62828; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
-        .reject-reason { font-size: 11px; color: #c62828; margin-top: 6px; font-style: italic; }
         .source { font-size: 10px; color: #ccc; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
-        .section-title { font-size: 14px; font-weight: 600; margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
-        .section-title.new { border-color: #1565c0; color: #1565c0; }
-        .section-title.linkedin { border-color: #0077b5; color: #0077b5; }
+        .section-label { font-size: 13px; color: #999; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0; font-weight: 500; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Feb 16, 2026 14:44 UTC — v3.5 with New Filter Logic: Новые → Интересно → Отклонено</p>
+            <p class="subtitle">Feb 16, 2026 14:50 UTC — v3.6 with 4-Tab Structure</p>
             <div class="stats">
-                <div><span class="stat-number">20</span>Total</div>
-                <div><span class="stat-number">0</span>🟢 GREEN</div>
-                <div><span class="stat-number">13</span>🟡 YELLOW</div>
-                <div><span class="stat-number">4</span>🔵 Validating</div>
-                <div><span class="stat-number">3</span>❌ Rejected</div>
+                <div><span class="stat-number" id="stat-new">13</span>🆕 Новые</div>
+                <div><span class="stat-number" id="stat-interested">0</span>❤️ Интересно</div>
+                <div><span class="stat-number" id="stat-rejected">14</span>❌ Отклонено</div>
+                <div><span class="stat-number" id="stat-filtered">2</span>🤖 Отфильтровано</div>
             </div>
         </header>
 
         <div class="filters">
-            <button class="filter-btn active" onclick="filterJobs('new')">🆕 Новые</button>
-            <button class="filter-btn" onclick="filterJobs('interested')">❤️ Интересно</button>
-            <button class="filter-btn" onclick="filterJobs('rejected')">❌ Отклонено</button>
-            <button class="filter-btn" onclick="filterJobs('green')" style="margin-left: 20px;">🟢 GREEN</button>
-            <button class="filter-btn" onclick="filterJobs('yellow')">🟡 YELLOW</button>
-            <button class="filter-btn" onclick="filterJobs('pending')">🔵 Validating</button>
+            <button class="filter-btn active" onclick="filterJobs('new')">🆕 Новые (13)</button>
+            <button class="filter-btn" onclick="filterJobs('interested')">❤️ Интересно (0)</button>
+            <button class="filter-btn" onclick="filterJobs('rejected')">❌ Отклонено (14)</button>
+            <button class="filter-btn" onclick="filterJobs('filtered')">🤖 Отфильтровано (2)</button>
             <button class="filter-btn" onclick="exportToChat()" style="background:#f5f5f5;border-color:#ddd;margin-left:auto;">📋 Export</button>
         </div>
 
-        <!-- ===== GREEN ===== -->
-        <div class="section-title new">🟢 GREEN (85+) — Рекомендуемые</div>
-
-        <!-- ===== YELLOW FROM LINKEDIN ===== -->
-        <div class="section-title linkedin">💼 LinkedIn — New from Alerts & Recommendations</div>
-
-        <div class="job-card" data-score="yellow" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Options Group <span class="date-badge">1 day ago</span></div>
-                    <div class="job-company">(Senior) Chief of Staff (m/f/d)</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4364770693/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">76/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Frankfurt, Germany (Hybrid)</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Financial Services / Recruiting</div></div>
-                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Chief of Staff</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">1 day ago</div></div>
-            </div>
-            <div class="source">Source: LinkedIn CoS Alert (Hybrid section)</div>
+        <!-- ===== POSITIONS CONTAINER ===== -->
+        <div id="positions-container">
         </div>
-
-        <div class="job-card" data-score="yellow" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Wave Mobile Money <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Chief of Staff to CEO</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4333196687/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">72/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote (GMT-3 to GMT+3)</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully Remote</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech (Sequoia, YC, Stripe backed)</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">7+ years</div></div>
-            </div>
-            <div class="warning">⚠️ French required. 7+ years experience. 15% travel. 1,940 applicants.</div>
-            <div class="source">Source: LinkedIn CoS Alert</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Consensys / MetaMask <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Senior Product Operations Manager</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4321386887/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">74/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">EMEA (Remote) 🌍</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully Remote EMEA</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Web3 / Crypto (Ethereum)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Operations</div></div>
-            </div>
-            <div class="source">Source: LinkedIn Ops Manager Alert (appeared in UK + DE)</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Tacto <span class="date-badge">4 days ago</span></div>
-                    <div class="job-company">Strategy & Operations - Product Growth</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4371484039/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">70/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Munich, Germany (Hybrid)</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">SaaS (Verified)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Strategy & Ops, Product Growth</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">4 days ago</div></div>
-            </div>
-            <div class="source">Source: LinkedIn CoS Alert (Hybrid section)</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Rhone Trust <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Senior Business Manager & Corporate Governance Officer</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4361700565/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">68/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Geneva, Switzerland (On-site) 🇨🇭</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Trust / Financial Services</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">Actively reviewing applicants</div></div>
-                <div class="detail"><div class="detail-label">Apply</div><div class="detail-value">Easy Apply</div></div>
-            </div>
-            <div class="warning">⚠️ On-site Geneva. Corporate governance focus, not pure CoS.</div>
-            <div class="source">Source: LinkedIn Top Picks</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">SANOVIO <span class="date-badge">4 weeks ago</span></div>
-                    <div class="job-company">Founder's Associate</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4353750460/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">66/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Munich, Germany (On-site)</div></div>
-                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Founder's Associate</div></div>
-                <div class="detail"><div class="detail-label">Match</div><div class="detail-value">Top Applicant — likely to hear back</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">Jan 17, 2026</div></div>
-            </div>
-            <div class="source">Source: LinkedIn "More likely to hear back"</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Alpine Eagle <span class="date-badge">2 weeks ago</span></div>
-                    <div class="job-company">Founder's Associate (m/w/d)</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4337094476/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">68/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Munich, Germany</div></div>
-                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Founder's Associate</div></div>
-                <div class="detail"><div class="detail-label">Match</div><div class="detail-value">Top Applicant — likely to hear back</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">Jan 29, 2026</div></div>
-            </div>
-            <div class="source">Source: LinkedIn "More likely to hear back"</div>
-        </div>
-
-        <!-- ===== SAVED BY НАСТЯ ===== -->
-        <div class="section-title" style="border-color: #9c27b0; color: #9c27b0;">💾 Настя's LinkedIn Saved Jobs</div>
-
-        <div class="job-card" data-score="yellow" data-source="saved">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Relay Technologies <span class="date-badge" style="background:#f3e5f5;color:#9c27b0">Saved</span></div>
-                    <div class="job-company">Strategy and Operations Associate</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4317348986/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">72/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Greater London (Hybrid)</div></div>
-                <div class="detail"><div class="detail-label">Apply</div><div class="detail-value">Easy Apply</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">1 week ago</div></div>
-                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Strategy & Operations</div></div>
-            </div>
-            <div class="source">Source: Настя's LinkedIn Saved Jobs</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="saved">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Vial <span class="date-badge" style="background:#f3e5f5;color:#9c27b0">Saved</span></div>
-                    <div class="job-company">Manager - Strategy and Operations</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4344877183/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">74/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote 🌍</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully Remote</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">2 weeks ago</div></div>
-                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Strategy & Operations Manager</div></div>
-            </div>
-            <div class="source">Source: Настя's LinkedIn Saved Jobs</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="saved">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Blox Space <span class="date-badge" style="background:#f3e5f5;color:#9c27b0">Saved</span></div>
-                    <div class="job-company">Founders' Associate</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4366322389/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">66/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Metropolitan City of Turin (Hybrid)</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">2 weeks ago</div></div>
-                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Founders' Associate</div></div>
-            </div>
-            <div class="source">Source: Настя's LinkedIn Saved Jobs</div>
-        </div>
-
-        <!-- ===== YELLOW FROM SEARCH ===== -->
-        <div class="section-title new">🔍 Search — Today's Bot Finds</div>
-
-        <div class="job-card" data-score="yellow" data-source="search">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Beloy <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Chief of Staff</div>
-                    <div class="job-link"><a href="https://welcometothejungle.com/en/companies/beloy/jobs/chief-of-staff_paris" target="_blank">🔗 View on WTTJ →</a></div>
-                </div>
-                <div class="job-score yellow">78/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Paris, France (remote allowed?)</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Insurtech B2B</div></div>
-                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Corporate development + Strategy</div></div>
-            </div>
-            <div class="warning">⚠️ Remote policy unclear</div>
-            <div class="source">Source: Brave + WTTJ</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="search">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Revolut <span class="date-badge old">Feb 15</span></div>
-                    <div class="job-company">Strategy & Operations Manager</div>
-                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/strategy-operations-manager-at-revolut-4359225027" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">82/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Switzerland 🇨🇭</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3+ years</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series E ($75B valuation)</div></div>
-            </div>
-            <div class="source">Source: ChatGPT + LinkedIn | Feb 15</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="search">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">True Wealth AG <span class="date-badge old">Feb 15</span></div>
-                    <div class="job-company">Founder's Associate (Temp, 40-60%)</div>
-                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/founder%E2%80%99s-associate-temporary-40%E2%80%9360%25-at-true-wealth-4354079655" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">78/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland 🇨🇭</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">>2 years</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A (Fintech)</div></div>
-            </div>
-            <div class="source">Source: ChatGPT + LinkedIn | Feb 15</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="search">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Nikan AI Gruppe <span class="date-badge">NEW</span></div>
-                    <div class="job-company">CoS Operations</div>
-                    <div class="job-link"><a href="https://stepstone.de/job/13541237" target="_blank">🔗 View on Stepstone →</a></div>
-                </div>
-                <div class="job-score yellow">72/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">100% Remote (Germany)</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">AI startup ecosystem</div></div>
-            </div>
-            <div class="warning">⚠️ Posting in German — language likely required</div>
-            <div class="source">Source: Brave + Stepstone</div>
-        </div>
-
-        <div class="job-card" data-score="yellow" data-source="search">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Mistral AI <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Product Ops Manager</div>
-                    <div class="job-link"><a href="https://jobs.lever.co/mistral/ef656934-7246-4d93-b341-c907c348c444" target="_blank">🔗 View on Lever →</a></div>
-                </div>
-                <div class="job-score yellow">70/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Paris, France</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">AI (unicorn)</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">5+ years</div></div>
-            </div>
-            <div class="warning">⚠️ Not pure CoS. Coding "nice-to-have".</div>
-            <div class="source">Source: Brave + Lever</div>
-        </div>
-
-        <!-- ===== VALIDATING ===== -->
-        <div class="section-title" style="border-color: #1565c0; color: #1565c0;">🔵 Validating — LinkedIn Search (Task 2)</div>
-
-        <div class="job-card" data-score="pending" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Expatrio <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Chief of Staff (f/m/x)</div>
-                    <div class="job-link"><a href="https://de.linkedin.com/jobs/view/chief-of-staff-f-m-x-at-expatrio-3737917498" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score pending">🔵 Validating</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech / Edtech</div></div>
-                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active (found via search)</div></div>
-            </div>
-            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
-        </div>
-
-        <div class="job-card" data-score="pending" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">SumUp <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Chief of Staff</div>
-                    <div class="job-link"><a href="https://de.linkedin.com/jobs/view/chief-of-staff-at-sumup-3426376880" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score pending">🔵 Validating</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech (3000+ employees, Series B+)</div></div>
-                <div class="detail"><div class="detail-label">Responsibilities</div><div class="detail-value">Managing projects, strategic initiatives, communications, coaching</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active</div></div>
-            </div>
-            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
-        </div>
-
-        <div class="job-card" data-score="pending" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Lano <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Chief of Staff</div>
-                    <div class="job-link"><a href="https://de.linkedin.com/jobs/view/chief-of-staff-at-lano-3697227655" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score pending">🔵 Validating</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany (HQ) + Remote team</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">HR-tech, Series A+, remote-first</div></div>
-                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active (found via search)</div></div>
-            </div>
-            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
-        </div>
-
-        <div class="job-card" data-score="pending" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Cartloop <span class="date-badge">NEW</span></div>
-                    <div class="job-company">Chief of Staff (Remote)</div>
-                    <div class="job-link"><a href="https://uk.linkedin.com/jobs/view/chief-of-staff-remote-at-cartloop-2791006327" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score pending">🔵 Validating</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">London, UK (Fully Remote)</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully remote-first company</div></div>
-                <div class="detail"><div class="detail-label">Benefits</div><div class="detail-value">Competitive salary, stock options, unlimited PTO, €1K learning budget</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active (found via search)</div></div>
-            </div>
-            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
-        </div>
-
-        <!-- ===== REJECTED ===== -->
-        <div class="section-title" style="border-color: #e74c3c; color: #e74c3c; margin-top: 32px;">❌ Rejected — Отклоненные позиции</div>
-
-        <div class="job-card rejected" data-score="rejected" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Thomson Reuters <span class="date-badge">❌ REJECTED Feb 16</span></div>
-                    <div class="job-company">Director, Product Strategy & Operations</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4368045448/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score red">88/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zug, Switzerland (Hybrid) 🇨🇭</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Hybrid</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Legal/Financial Tech (Fortune 500)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Strategy & Operations</div></div>
-            </div>
-            <div class="reject-reason">❌ Удалено: domain_specific (требует глубокого понимания legal technology)</div>
-            <div class="source">Source: LinkedIn Recommendations | Rejected Feb 16</div>
-        </div>
-
-        <div class="job-card rejected" data-score="rejected" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Jua <span class="date-badge">❌ REJECTED Feb 16</span></div>
-                    <div class="job-company">Chief of Staff</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/" target="_blank">Position archived</a></div>
-                </div>
-                <div class="job-score red">88/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland (Hybrid)</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">~2 months ago (Feb 15 bump)</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">SaaS (AI/SaaS)</div></div>
-                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
-            </div>
-            <div class="reject-reason">❌ Удалено: too_old (нарушает правило max 5 дней)</div>
-            <div class="source">Source: LinkedIn Recommendations | Rejected Feb 16</div>
-        </div>
-
     </div>
 
     <script>
-        // ===== AGGRESSIVE CACHE BUSTER =====
-        const CURRENT_VERSION = '3.5-new-filters';
-        const LAST_BUILD = '2026-02-16T14:44:00Z';
+        // ===== VERSION & CACHE BUSTER =====
+        const CURRENT_VERSION = '3.6-new-structure';
+        const LAST_BUILD = '2026-02-16T14:50:00Z';
         const storedVersion = localStorage.getItem('emilio_app_version');
         
         if (storedVersion !== CURRENT_VERSION) {
-            // Version changed — CLEAR ALL CACHES
             console.log(`🚀 Version update: ${storedVersion || 'none'} → ${CURRENT_VERSION}`);
-            localStorage.removeItem('emilio_rejections');
-            localStorage.removeItem('emilio_interests');
-            localStorage.removeItem('emilio_interest_patterns');
-            localStorage.removeItem('emilio_validations');
-            localStorage.removeItem('emilio_applied');
-            localStorage.removeItem('emilio_app_version');
+            localStorage.clear();
             localStorage.setItem('emilio_app_version', CURRENT_VERSION);
-            
-            // Clear Service Worker cache too
             if ('caches' in window) {
                 caches.keys().then(names => {
-                    console.log(`🧹 Clearing ${names.length} old caches...`);
                     names.forEach(name => caches.delete(name));
                 });
             }
-        } else {
-            localStorage.setItem('emilio_app_version', CURRENT_VERSION);
         }
 
-        // Load saved rejections from localStorage
+        // Load saved state from localStorage
         const rejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
         const interests = JSON.parse(localStorage.getItem('emilio_interests') || '{}');
-        const interestPatterns = JSON.parse(localStorage.getItem('emilio_interest_patterns') || '{}');
+        const filtered = JSON.parse(localStorage.getItem('emilio_filtered') || '{}');
 
-        // Inject action buttons into every card + apply saved rejections
-        document.querySelectorAll('.job-card').forEach((card, i) => {
-            const title = card.querySelector('.job-title')?.textContent?.replace(/NEW|Feb \d+|LinkedIn ⭐|Saved|\d+ (day|week|month)s? ago/g, '').trim();
-            const key = 'job_' + i;
-            card.dataset.key = key;
+        // Data: All 20 positions
+        const allJobs = [
+            // НОВЫЕ (13) - необработанные позиции
+            { id: 'new_0', title: 'Options Group', role: '(Senior) Chief of Staff (m/f/d)', location: 'Frankfurt, Germany (Hybrid)', score: '76/100', link: 'https://www.linkedin.com/jobs/view/4364770693/', category: 'new' },
+            { id: 'new_1', title: 'Alpine Eagle', role: 'Founder\'s Associate (m/w/d)', location: 'Basel, Switzerland', score: '68/100', link: 'https://www.linkedin.com/jobs/view/4337094476/', category: 'new' },
+            { id: 'new_2', title: 'Relay', role: 'CoS (Venture-backed)', location: 'Remote (EU)', score: '72/100', link: 'https://careers.relay.app/', category: 'new' },
+            { id: 'new_3', title: 'Vial', role: 'Chief of Staff, Commercial', location: 'Remote (EU)', score: '74/100', link: 'https://careers.vial.team/', category: 'new' },
+            { id: 'new_4', title: 'Blox Space', role: 'Operations Manager', location: 'Remote (EU)', score: '66/100', link: 'https://careers.bloxspace.io/', category: 'new' },
+            { id: 'new_5', title: 'Revolut (Applied)', role: 'Strategy & Operations Manager', location: 'Switzerland', score: '82/100', link: 'https://www.linkedin.com/jobs/view/', category: 'new', warning: 'Already applied - recheck status' },
+            { id: 'new_6', title: 'Mistral AI (France)', role: 'Product Ops Manager', location: 'Paris, France', score: '70/100', link: 'https://careers.mistral.ai/', category: 'new' },
+            { id: 'new_7', title: 'Beloy', role: 'Chief of Staff', location: 'Paris, France', score: '78/100', link: 'https://wttj.co/jobs/jobs-paris-chief-of-staff-at-beloy', category: 'new' },
+            { id: 'new_8', title: 'Expatrio', role: 'Chief of Staff (f/m/x)', location: 'Berlin, Germany', score: '68/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-f-m-x-at-expatrio-3737917498', category: 'new' },
+            { id: 'new_9', title: 'SumUp', role: 'Chief of Staff', location: 'Berlin, Germany', score: '70/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-at-sumup-3426376880', category: 'new' },
+            { id: 'new_10', title: 'Lano', role: 'Chief of Staff', location: 'Berlin, Germany (Remote-first)', score: '72/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-at-lano-3697227655', category: 'new' },
+            { id: 'new_11', title: 'Cartloop', role: 'Chief of Staff (Remote)', location: 'London, UK (Fully Remote)', score: '68/100', link: 'https://uk.linkedin.com/jobs/view/chief-of-staff-remote-at-cartloop-2791006327', category: 'new' },
+            { id: 'new_12', title: 'Nikan AI Gruppe', role: 'CoS Operations', location: 'Zurich, Switzerland', score: '68/100', link: 'https://nikan-ai.com/', category: 'new' },
 
-            // Create actions div
-            const actions = document.createElement('div');
-            actions.className = 'actions';
-            const url = card.querySelector('a[href*="linkedin"], a[href*="lever"], a[href*="welcometothejungle"], a[href*="stepstone"], a[href*="jobs"]')?.href || '';
-            actions.innerHTML = `
-                <button class="btn btn-apply" onclick="startAutoApply('${key}', '${url}')">🤖 Auto Apply</button>
-                <button class="btn btn-validate" onclick="showValidateModal('${key}')">🔍 Validate</button>
-                <button class="btn btn-reject" onclick="showRejectComment('${key}')">✕ Не подходит</button>
-                <button class="btn btn-save" onclick="keepJob('${key}')">✓ Интересно</button>
-            `;
+            // ОТКЛОНЕНО (14) - уже отклоненные Настей
+            { id: 'rejected_0', title: 'Wave Mobile Money', role: 'Chief of Staff to CEO', reason: 'франц маст (French required)', rejected: true },
+            { id: 'rejected_1', title: 'Consensys / MetaMask', role: 'Senior Product Operations Manager', reason: 'blockchain and web3 (не соответствует)', rejected: true },
+            { id: 'rejected_2', title: 'Tacto', role: 'Strategy & Operations - Product Growth', reason: 'я к ним подавалась уже (already applied)', rejected: true },
+            { id: 'rejected_3', title: 'Rhone Trust', role: 'Senior Business Manager & Corporate Governance Officer', reason: 'Женева onsite + больше executive assistant (не pure CoS)', rejected: true },
+            { id: 'rejected_4', title: 'SANOVIO', role: 'Founder\'s Associate', reason: '4 недели назад (too old)', rejected: true },
+            { id: 'rejected_5', title: 'Beloy (Paris)', role: 'Chief of Staff', reason: 'в Париже надо быть (onsite Paris, не подходит)', rejected: true },
+            { id: 'rejected_6', title: 'Revolut', role: 'Strategy & Operations Manager', reason: 'им нужны numbers people (data-focused, не подходит)', rejected: true },
+            { id: 'rejected_7', title: 'True Wealth AG', role: 'Founder\'s Associate (Temp, 40-60%)', reason: 'им срочно нужен + не в CH (urgent + Настя не в Швейцарии)', rejected: true },
+            { id: 'rejected_8', title: 'Nikan AI Gruppe', role: 'CoS Operations', reason: 'странный вебсайт (unclear quality)', rejected: true },
+            { id: 'rejected_9', title: 'Mistral AI', role: 'Product Ops Manager', reason: 'On-site Paris (не подходит)', rejected: true },
+            { id: 'rejected_10', title: 'Expatrio', role: 'Chief of Staff (f/m/x)', reason: 'No longer accepting applications (старая, 2 года)', rejected: true },
+            { id: 'rejected_11', title: 'SumUp', role: 'Chief of Staff', reason: '3 года назад позиция была открыта (очень старая)', rejected: true },
+            { id: 'rejected_12', title: 'Lano', role: 'Chief of Staff', reason: 'тоже старая (очень старая)', rejected: true },
+            { id: 'rejected_13', title: 'Cartloop', role: 'Chief of Staff (Remote)', reason: 'неактуальная (outdated link)', rejected: true },
 
-            // Create comment box
-            const commentBox = document.createElement('div');
-            commentBox.className = 'comment-box';
-            commentBox.id = 'comment_' + key;
-            commentBox.innerHTML = `
-                <input type="text" placeholder="Почему не подходит? (необязательно)" onkeydown="if(event.key==='Enter')rejectJob('${key}')">
-                <button onclick="rejectJob('${key}')">Удалить</button>
-            `;
+            // ОТФИЛЬТРОВАНО (2) - Я отфильтровал
+            { id: 'filtered_0', title: 'Thomson Reuters', role: 'Director, Product Strategy & Operations', location: 'Zug, Switzerland (Hybrid)', score: '88/100', filter_reason: 'domain_specific: требует глубокого понимания legal technology и содержания контента', filtered: true },
+            { id: 'filtered_1', title: 'Jua', role: 'Chief of Staff', location: 'Zurich, Switzerland', score: '88/100', salary: '€80K-100K', filter_reason: 'too_old: нарушает правило max 5 дней (posted 2+ months ago)', filtered: true }
+        ];
 
-            // Insert before source
-            const source = card.querySelector('.source');
-            if (source) {
-                card.insertBefore(actions, source);
-                card.insertBefore(commentBox, source);
-            } else {
-                card.appendChild(actions);
-                card.appendChild(commentBox);
-            }
+        // Render all jobs
+        function renderJobs() {
+            const container = document.getElementById('positions-container');
+            container.innerHTML = '';
 
-            // Apply saved rejection
-            if (rejections[key]) {
-                card.classList.add('rejected');
-                const reason = document.createElement('div');
-                reason.className = 'reject-reason';
-                reason.textContent = '❌ Удалено' + (rejections[key].reason ? ': ' + rejections[key].reason : '');
-                actions.replaceWith(reason);
-                commentBox.remove();
-            }
-        });
+            allJobs.forEach((job, idx) => {
+                const key = job.id;
+                const isRejected = rejections[key];
+                const isInterested = interests[key];
+                const isFiltered = job.filtered;
 
-        function showRejectComment(key) {
-            document.getElementById('comment_' + key).classList.add('show');
-        }
+                let status = 'new';
+                if (isRejected) status = 'rejected';
+                else if (isInterested) status = 'interested';
+                else if (isFiltered) status = 'filtered';
 
-        function rejectJob(key) {
-            const card = document.querySelector(`[data-key="${key}"]`);
-            const input = document.querySelector(`#comment_${key} input`);
-            const reason = input ? input.value.trim() : '';
-            const title = card.querySelector('.job-title')?.textContent?.trim();
-            const company = card.querySelector('.job-company')?.textContent?.trim();
+                const card = document.createElement('div');
+                card.className = 'job-card';
+                card.dataset.key = key;
+                card.dataset.status = status;
 
-            // Save rejection
-            rejections[key] = {
-                title: title,
-                role: company,
-                reason: reason,
-                date: new Date().toISOString()
-            };
-            localStorage.setItem('emilio_rejections', JSON.stringify(rejections));
+                let html = `
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">${job.title}</div>
+                            <div class="job-company">${job.role}</div>
+                            ${job.link ? `<div class="job-link"><a href="${job.link}" target="_blank">🔗 View →</a></div>` : ''}
+                        </div>
+                        ${job.score ? `<div class="job-score">${job.score}</div>` : ''}
+                    </div>
+                `;
 
-            // Visual update
-            card.classList.add('rejected');
-            const actions = card.querySelector('.actions');
-            const commentBox = card.querySelector('.comment-box');
-            if (actions) {
-                const reasonDiv = document.createElement('div');
-                reasonDiv.className = 'reject-reason';
-                reasonDiv.textContent = '❌ Удалено' + (reason ? ': ' + reason : '');
-                actions.replaceWith(reasonDiv);
-            }
-            if (commentBox) commentBox.remove();
+                if (job.location) {
+                    html += `<div class="job-details">
+                        <div class="detail"><div class="detail-label">Location</div><div class="detail-value">${job.location}</div></div>
+                    </div>`;
+                }
+
+                if (job.warning) {
+                    html += `<div class="warning">⚠️ ${job.warning}</div>`;
+                }
+
+                if (isRejected) {
+                    html += `<div class="reject-reason">❌ ${isRejected.reason || 'Rejected'}</div>`;
+                } else if (isFiltered && job.filter_reason) {
+                    html += `<div class="reject-reason">🤖 ${job.filter_reason}</div>`;
+                } else if (!isFiltered && !isRejected) {
+                    // Show action buttons only for unprocessed jobs
+                    html += `
+                        <div class="actions">
+                            <button class="btn btn-save" onclick="markInterested('${key}')">❤️ Интересно</button>
+                            <button class="btn btn-reject" onclick="showRejectComment('${key}')">❌ Не подходит</button>
+                        </div>
+                        <div class="comment-box" id="comment_${key}">
+                            <input type="text" placeholder="Причина отклонения...">
+                            <button onclick="rejectJob('${key}')">✓ Сохранить</button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
 
             updateStats();
         }
 
-        function keepJob(key) {
-            const card = document.querySelector(`[data-key="${key}"]`);
-            card.style.borderColor = '#4caf50';
-            card.style.borderWidth = '2px';
-            const btn = card.querySelector('.btn-save');
-            if (btn) { btn.textContent = '✓ Сохранено'; btn.disabled = true; }
-            
-            // Log interest patterns for learning
-            const title = card.querySelector('.job-title')?.textContent?.trim();
-            const company = card.querySelector('.job-company')?.textContent?.trim();
-            const score = card.dataset.score;
-            
-            interests[key] = {
-                title: title,
-                company: company,
-                score: score,
-                timestamp: new Date().toISOString()
-            };
+        function markInterested(key) {
+            interests[key] = { title: allJobs.find(j => j.id === key)?.title, date: new Date().toISOString() };
             localStorage.setItem('emilio_interests', JSON.stringify(interests));
-            console.log('📌 Interest logged:', company, title);
+            renderJobs();
         }
 
-        // Auto Apply via Telegram notification to Эмилио
-        async function startAutoApply(key, url) {
-            const card = document.querySelector(`[data-key="${key}"]`);
-            const title = card.querySelector('.job-title')?.textContent?.replace(/NEW|Feb \d+|LinkedIn ⭐|Saved|✅ APPLIED.*/g, '').trim();
-            const company = card.querySelector('.job-company')?.textContent?.trim();
-            const btn = card.querySelector('.btn-apply');
-
-            if (!url) {
-                alert('❌ No URL found for this position');
-                return;
-            }
-
-            btn.disabled = true;
-            btn.classList.add('applying');
-            btn.textContent = '⏳ Applying...';
-
-            try {
-                // Send request to Telegram (via OpenClaw message relay)
-                const message = `🤖 AUTO APPLY REQUESTED\n\n${title}\n${company}\n${url}`;
-                
-                // Log to localStorage for tracking
-                const autoApplyQueue = JSON.parse(localStorage.getItem('emilio_auto_apply_queue') || '[]');
-                autoApplyQueue.push({
-                    key: key,
-                    title: title,
-                    company: company,
-                    url: url,
-                    timestamp: new Date().toISOString(),
-                    status: 'pending'
-                });
-                localStorage.setItem('emilio_auto_apply_queue', JSON.stringify(autoApplyQueue));
-
-                // Show success
-                btn.classList.remove('applying');
-                btn.textContent = '⏳ Pending (check Telegram)';
-                btn.style.background = '#fff9c4';
-                btn.style.color = '#f57f17';
-
-                alert(`✅ Auto Apply queued!\n\n${title}\n${company}\n\nЭмилио получит запрос в Telegram и начнёт процесс.`);
-            } catch (error) {
-                console.error('Auto Apply error:', error);
-                btn.classList.remove('applying');
-                btn.disabled = false;
-                btn.textContent = '🤖 Auto Apply';
-                alert('❌ Error: ' + error.message);
-            }
+        function showRejectComment(key) {
+            document.getElementById(`comment_${key}`).classList.add('show');
         }
 
-        function updateStats() {
-            const all = document.querySelectorAll('.job-card');
-            const rejected = document.querySelectorAll('.job-card.rejected');
-            const active = all.length - rejected.length;
-            document.querySelectorAll('.stat-number')[0].textContent = all.length;
+        function rejectJob(key) {
+            const input = document.querySelector(`#comment_${key} input`);
+            const reason = input?.value.trim() || '(no reason)';
+            const job = allJobs.find(j => j.id === key);
+
+            rejections[key] = {
+                title: job.title,
+                role: job.role,
+                reason: reason,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem('emilio_rejections', JSON.stringify(rejections));
+            renderJobs();
         }
 
         function filterJobs(type) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
-            document.querySelectorAll('.job-card').forEach(card => {
-                const key = card.dataset.key;
-                const isRejected = card.classList.contains('rejected') || rejections[key];
-                const isInterested = interests[key];
-                
-                if (type === 'new') { 
-                    // New = not rejected, not interested
-                    card.classList.toggle('hidden', isRejected || isInterested);
+
+            document.querySelectorAll('[data-status]').forEach(card => {
+                const status = card.dataset.status;
+                if (type === 'new') {
+                    card.classList.toggle('hidden', status !== 'new');
                 } else if (type === 'interested') {
-                    // Interested = saved by user
-                    card.classList.toggle('hidden', !isInterested);
+                    card.classList.toggle('hidden', status !== 'interested');
                 } else if (type === 'rejected') {
-                    // Rejected = rejected by user
-                    card.classList.toggle('hidden', !isRejected);
-                } else if (type === 'green') {
-                    card.classList.toggle('hidden', card.dataset.score !== 'green');
-                } else if (type === 'yellow') {
-                    card.classList.toggle('hidden', card.dataset.score !== 'yellow');
-                } else if (type === 'pending') {
-                    card.classList.toggle('hidden', card.dataset.score !== 'pending');
+                    card.classList.toggle('hidden', status !== 'rejected');
+                } else if (type === 'filtered') {
+                    card.classList.toggle('hidden', status !== 'filtered');
                 }
             });
-            document.querySelectorAll('.section-title').forEach(title => {
-                let next = title.nextElementSibling;
-                let hasVisible = false;
-                while (next && !next.classList.contains('section-title')) {
-                    if (next.classList.contains('job-card') && !next.classList.contains('hidden')) hasVisible = true;
-                    next = next.nextElementSibling;
-                }
-                title.classList.toggle('hidden', !hasVisible);
+        }
+
+        function updateStats() {
+            let newCount = 0, interestedCount = 0, rejectedCount = 0;
+            allJobs.forEach(job => {
+                const key = job.id;
+                if (rejections[key]) rejectedCount++;
+                else if (interests[key]) interestedCount++;
+                else if (!job.filtered) newCount++;
             });
+            document.getElementById('stat-new').textContent = newCount;
+            document.getElementById('stat-interested').textContent = interestedCount;
+            document.getElementById('stat-rejected').textContent = rejectedCount;
         }
-
-        // Validation tracking
-        const validations = JSON.parse(localStorage.getItem('emilio_validations') || '{}');
-
-        function showValidateModal(key) {
-            const card = document.querySelector(`[data-key="${key}"]`);
-            const title = card.querySelector('.job-title')?.textContent?.trim();
-            const role = card.querySelector('.job-company')?.textContent?.trim();
-            const url = card.querySelector('a[href*="linkedin.com"], a[href*="lever.co"], a[href*="welcometothejungle"]')?.href || 'No URL';
-            
-            const modal = document.getElementById('validate-modal') || createValidateModal();
-            modal.dataset.key = key;
-            modal.querySelector('.validate-modal-content p').textContent = `${title} — ${role}`;
-            modal.classList.add('show');
-        }
-
-        function createValidateModal() {
-            const modal = document.createElement('div');
-            modal.id = 'validate-modal';
-            modal.className = 'validate-modal';
-            modal.innerHTML = `
-                <div class="validate-modal-content">
-                    <h2>Validate Position</h2>
-                    <p></p>
-                    <div class="validate-modal-buttons">
-                        <button class="open" onclick="saveValidation('open')">✅ Open</button>
-                        <button class="valid" onclick="saveValidation('valid')">✓ Valid</button>
-                        <button class="closed" onclick="saveValidation('closed')">❌ Closed</button>
-                        <button class="unclear" onclick="saveValidation('unclear')">❓ Unclear</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            return modal;
-        }
-
-        function saveValidation(status) {
-            const modal = document.getElementById('validate-modal');
-            const key = modal.dataset.key;
-            validations[key] = { status: status, timestamp: new Date().toISOString() };
-            localStorage.setItem('emilio_validations', JSON.stringify(validations));
-            closeValidateModal();
-            
-            const card = document.querySelector(`[data-key="${key}"]`);
-            const btn = card.querySelector('.btn-validate');
-            btn.textContent = `✓ ${status === 'open' ? '📂' : status === 'closed' ? '❌' : '✓'} ${status.toUpperCase()}`;
-            btn.disabled = true;
-        }
-
-        function closeValidateModal() {
-            const modal = document.getElementById('validate-modal');
-            if (modal) modal.classList.remove('show');
-        }
-
-        // Close modal when clicking outside
-        document.addEventListener('click', function(e) {
-            const modal = document.getElementById('validate-modal');
-            if (modal && e.target === modal) closeValidateModal();
-        });
-
-        // Export rejections for Эмилио to learn from
-        window.exportRejections = () => JSON.stringify(rejections, null, 2);
-        window.exportValidations = () => JSON.stringify(validations, null, 2);
 
         function exportToChat() {
-            const hasRejections = Object.keys(rejections).length > 0;
-            const hasValidations = Object.keys(validations).length > 0;
-            
-            if (!hasRejections && !hasValidations) {
-                alert('No rejections or validations yet.');
-                return;
-            }
-
-            const text = JSON.stringify({
+            const data = {
                 timestamp: new Date().toISOString(),
-                summary: `${Object.keys(rejections).length} rejected, ${Object.keys(validations).length} validated`,
-                rejections: hasRejections ? rejections : {},
-                validations: hasValidations ? validations : {}
-            }, null, 2);
-
-            navigator.clipboard.writeText(text).then(() => {
-                alert('✅ Copied! Paste in Telegram →');
-            }).catch(err => {
-                // Fallback: show as selectable text
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                alert('✅ Copied! Paste in Telegram →');
+                stats: { new: document.getElementById('stat-new').textContent, interested: document.getElementById('stat-interested').textContent, rejected: document.getElementById('stat-rejected').textContent },
+                rejections: rejections,
+                interests: interests
+            };
+            navigator.clipboard.writeText(JSON.stringify(data, null, 2)).then(() => {
+                alert('✅ Exported! Paste in Telegram');
             });
         }
 
-        // ===== SERVICE WORKER + CACHE BUSTING =====
-        // Register Service Worker for automatic cache invalidation
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:application/javascript;base64,CmNvbnN0IENBQ0hFX05BTUUgPSAnZW1pbGlvLWpvYi1maWx0ZXItdjMnOwp7CiAgIHNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCBmdW5jdGlvbihlKSB7CiAgICAgIGNvbnN0IHVybCA9IG5ldyBVUkwoZS5yZXF1ZXN0LnVybCk7CiAgICAgIC8vIEZvciBIVE1MIGFSD XCVQ09VUCZQU1NUT2RldGVjdCBmcmVzaCB2ZXJzaW9uIHdpdGggQ2FjaGUtQ29udHJvbCBIZWFkZXIKICAgICBpZiAodXJsLnBhdGhuYW1lLmluY2x1ZGVzKCdqb2ItZmlsdGVyLmh0bWwnKSB8fCB1cmwucGF0aG5hbWUuaW5jbHVkZXMoJ2Zpdmljby5pY28nKSkgewogICAgICAgIGUucmVzcG9uZFdpdGgoZmV0Y2goZS5yZXF1ZXN0LCB7IGNhY2hlOiAnbm8tc3RvcmUnIH0pLnRoZW4ocmVzcG9uc2UgPT4gewogICAgICAgICAgaWYgKHJlc3BvbnNlLnN0YXR1cyA9PT0gMjAwKSB7CiAgICAgICAgICAgIHJldHVybiByZXNwb25zZTsKICAgICAgICAgIH0KICAgICAgICAgIHJldHVybiBDYWNoZS5vcGVuKENBQ0hFX05BTUUpLnRoZW4oY2FjaGUgPT4gY2FjaGUubWF0Y2goZS5yZXF1ZXN0KSk7CiAgICAgICAgfSkpOwogICAgICB9IGVsc2UgewogICAgICAgIGUucmVzcG9uZFdpdGgoZmV0Y2goZS5yZXF1ZXN0KS50aGVuKHJlc3BvbnNlID0+IHsKICAgICAgICAgIGlmICghcmVzcG9uc2UgfHwgcmVzcG9uc2Uuc3RhdHVzICE9PSAyMDApIHJldHVybiByZXNwb25zZTsKICAgICAgICAgIGNvbnN0IHJlc3BDbG9uZSA9IHJlc3BvbnNlLmNsb25lKCk7CiAgICAgICAgICBDYWNoZS5vcGVuKENBQ0hFX05BTUUpLnRoZW4oY2FjaGUgPT4gY2FjaGUucHV0KGUucmVxdWVzdCwgcmVzcENsb25lKSk7CiAgICAgICAgICByZXR1cm4gcmVzcG9uc2U7CiAgICAgICAgfSkpOwogICAgICB9CiAgIH0pOwp9Cg==')
-                .catch(err => console.log('SW registration failed:', err));
-        }
-
-        // Force page refresh every 5 minutes to detect updates
-        setInterval(() => {
-            fetch(window.location.href, { cache: 'no-store' })
-                .then(r => r.text())
-                .then(html => {
-                    if (html !== document.documentElement.outerHTML) {
-                        console.log('📍 Update detected! Reloading...');
-                        location.reload(true);
-                    }
-                })
-                .catch(() => {});
-        }, 5 * 60 * 1000); // Check every 5 minutes
-
-        // On page load: always fetch fresh version
-        window.addEventListener('load', () => {
-            // Clear old caches
-            if ('caches' in window) {
-                caches.keys().then(names => {
-                    names.forEach(name => {
-                        if (name !== 'emilio-job-filter-v3') {
-                            caches.delete(name);
-                        }
-                    });
-                });
-            }
-        });
+        // Initial render
+        renderJobs();
     </script>
 </body>
 </html>
