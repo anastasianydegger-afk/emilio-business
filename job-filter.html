@@ -9,61 +9,54 @@
     <title>🦀 Job Filter</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; color: #333; padding: 40px 20px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; color: #333; padding: 20px 16px; }
         .container { max-width: 900px; margin: 0 auto; }
-        header { margin-bottom: 40px; text-align: center; }
-        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-        .subtitle { font-size: 14px; color: #999; }
-        .stats { display: flex; gap: 40px; justify-content: center; margin-top: 20px; font-size: 14px; }
-        .stat-number { font-weight: 600; margin-right: 8px; }
-        .filters { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
-        .filter-btn { padding: 8px 16px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; cursor: pointer; background: white; transition: all 0.2s; }
+        header { margin-bottom: 30px; text-align: center; }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+        .subtitle { font-size: 13px; color: #999; }
+        .stats { display: flex; gap: 30px; justify-content: center; margin-top: 16px; font-size: 13px; }
+        .stat-number { font-weight: 600; margin-right: 6px; }
+        .filters { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+        .filter-btn { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 12px; cursor: pointer; background: white; transition: all 0.2s; }
         .filter-btn:hover { border-color: #333; }
         .filter-btn.active { background: #333; color: white; border-color: #333; }
-        .date-badge { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+        .date-badge { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 6px; }
         .date-badge.old { background: #f5f5f5; color: #999; }
-        .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 24px; margin-bottom: 20px; transition: opacity 0.3s; }
-        .job-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
-        .job-title { font-size: 18px; font-weight: 600; }
-        .job-company { font-size: 14px; color: #999; }
-        .job-link { font-size: 13px; color: #0066cc; font-weight: 500; margin-top: 6px; }
+        .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin-bottom: 16px; transition: opacity 0.3s; }
+        .job-header { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: flex-start; }
+        .job-title { font-size: 16px; font-weight: 600; }
+        .job-company { font-size: 13px; color: #999; }
+        .job-link { font-size: 12px; color: #0066cc; font-weight: 500; margin-top: 4px; }
         .job-link a { color: #0066cc; text-decoration: none; }
         .job-link a:hover { text-decoration: underline; }
-        .job-score { display: inline-block; background: #f0f0f0; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .job-score { display: inline-block; background: #f0f0f0; padding: 4px 10px; border-radius: 16px; font-size: 11px; font-weight: 600; white-space: nowrap; }
         .job-score.green { background: #e8f5e9; color: #2e7d32; }
         .job-score.yellow { background: #fff3e0; color: #e65100; }
         .job-score.red { background: #ffebee; color: #c62828; }
         .job-score.pending { background: #e3f2fd; color: #1565c0; }
-        .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
-        .detail { display: flex; flex-direction: column; gap: 4px; }
-        .detail-label { font-size: 11px; color: #999; text-transform: uppercase; font-weight: 500; }
-        .detail-value { font-size: 14px; }
-        .detail-value a { color: #0066cc; text-decoration: none; }
-        .detail-value a:hover { text-decoration: underline; }
-        .warning { font-size: 12px; color: #e65100; margin-top: 8px; padding: 8px 12px; background: #fff3e0; border-radius: 6px; }
-        .btn { padding: 10px 16px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; margin-right: 8px; background: white; }
-        .btn:hover { border-color: #333; }
-        .btn-huntr { background: #0066cc; color: white; border-color: #0066cc; }
-        .btn-huntr:hover { background: #0052a3; }
-        .btn-reject { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
-        .btn-reject:hover { background: #ffcdd2; }
-        .rejected { opacity: 0.3; }
+        .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+        .detail { display: flex; flex-direction: column; gap: 2px; }
+        .detail-label { font-size: 10px; color: #999; text-transform: uppercase; font-weight: 500; }
+        .detail-value { font-size: 13px; }
+        .warning { font-size: 11px; color: #e65100; margin-top: 6px; padding: 6px 10px; background: #fff3e0; border-radius: 6px; }
+        .rejected { opacity: 0.25; }
         .hidden { display: none; }
-        .badge-red { color: #c62828; font-weight: 600; }
-        .source { font-size: 11px; color: #ccc; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; }
-        .section-title { font-size: 16px; font-weight: 600; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #e0e0e0; }
+        .source { font-size: 10px; color: #ccc; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+        .section-title { font-size: 14px; font-weight: 600; margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
         .section-title.new { border-color: #1565c0; color: #1565c0; }
+        .section-title.linkedin { border-color: #0077b5; color: #0077b5; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Review & filter positions — Feb 16, 2026</p>
+            <p class="subtitle">Feb 16, 2026 — Updated with LinkedIn alerts</p>
             <div class="stats">
-                <div><span class="stat-number" id="total">11</span>Total</div>
-                <div><span class="stat-number" id="active">10</span>Active</div>
-                <div><span class="stat-number" id="rejected-count">1</span>Rejected</div>
+                <div><span class="stat-number">21</span>Total</div>
+                <div><span class="stat-number">1</span>🟢 GREEN</div>
+                <div><span class="stat-number">13</span>🟡 YELLOW</div>
+                <div><span class="stat-number">4</span>🔵 Validating</div>
             </div>
         </header>
 
@@ -72,13 +65,239 @@
             <button class="filter-btn" onclick="filterJobs('green')">🟢 GREEN</button>
             <button class="filter-btn" onclick="filterJobs('yellow')">🟡 YELLOW</button>
             <button class="filter-btn" onclick="filterJobs('pending')">🔵 Validating</button>
-            <button class="filter-btn" onclick="filterJobs('new')">🆕 Today</button>
+            <button class="filter-btn" onclick="filterJobs('linkedin')">💼 LinkedIn</button>
+            <button class="filter-btn" onclick="filterJobs('saved')">💾 Saved</button>
         </div>
 
-        <div class="section-title new">🆕 Feb 16, 2026 — Today's Finds</div>
+        <!-- ===== GREEN ===== -->
+        <div class="section-title new">🟢 GREEN (85+) — Рекомендуемые</div>
 
-        <!-- NEW: Beloy -->
-        <div class="job-card" id="job-1" data-score="yellow" data-date="new">
+        <div class="job-card" data-score="green" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Thomson Reuters <span class="date-badge">LinkedIn ⭐</span></div>
+                    <div class="job-company">Director, Product Strategy & Operations</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4368045448/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score green">88/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zug, Switzerland (Hybrid) 🇨🇭</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Hybrid</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Legal/Financial Tech (Fortune 500)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Strategy & Operations</div></div>
+            </div>
+            <div class="source">Source: LinkedIn Recommendations | Настя moves to Zug May 2026</div>
+        </div>
+
+        <div class="job-card" data-score="green" data-source="search">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Jua <span class="date-badge old">Feb 15</span></div>
+                    <div class="job-company">Chief of Staff</div>
+                </div>
+                <div class="job-score green">88/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland (Hybrid) 🇨🇭</div></div>
+                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3-5 years</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A+ (AI/SaaS)</div></div>
+            </div>
+            <div class="source">Source: Gemini | Found: Feb 15</div>
+        </div>
+
+        <!-- ===== YELLOW FROM LINKEDIN ===== -->
+        <div class="section-title linkedin">💼 LinkedIn — New from Alerts & Recommendations</div>
+
+        <div class="job-card" data-score="yellow" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Options Group <span class="date-badge">1 day ago</span></div>
+                    <div class="job-company">(Senior) Chief of Staff (m/f/d)</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4364770693/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">76/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Frankfurt, Germany (Hybrid)</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Financial Services / Recruiting</div></div>
+                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Chief of Staff</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">1 day ago</div></div>
+            </div>
+            <div class="source">Source: LinkedIn CoS Alert (Hybrid section)</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Wave Mobile Money <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Chief of Staff to CEO</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4333196687/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">72/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote (GMT-3 to GMT+3)</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully Remote</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech (Sequoia, YC, Stripe backed)</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">7+ years</div></div>
+            </div>
+            <div class="warning">⚠️ French required. 7+ years experience. 15% travel. 1,940 applicants.</div>
+            <div class="source">Source: LinkedIn CoS Alert</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Consensys / MetaMask <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Senior Product Operations Manager</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4321386887/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">74/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">EMEA (Remote) 🌍</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully Remote EMEA</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Web3 / Crypto (Ethereum)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Operations</div></div>
+            </div>
+            <div class="source">Source: LinkedIn Ops Manager Alert (appeared in UK + DE)</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Tacto <span class="date-badge">4 days ago</span></div>
+                    <div class="job-company">Strategy & Operations - Product Growth</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4371484039/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">70/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Munich, Germany (Hybrid)</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">SaaS (Verified)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Strategy & Ops, Product Growth</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">4 days ago</div></div>
+            </div>
+            <div class="source">Source: LinkedIn CoS Alert (Hybrid section)</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Rhone Trust <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Senior Business Manager & Corporate Governance Officer</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4361700565/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">68/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Geneva, Switzerland (On-site) 🇨🇭</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Trust / Financial Services</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">Actively reviewing applicants</div></div>
+                <div class="detail"><div class="detail-label">Apply</div><div class="detail-value">Easy Apply</div></div>
+            </div>
+            <div class="warning">⚠️ On-site Geneva. Corporate governance focus, not pure CoS.</div>
+            <div class="source">Source: LinkedIn Top Picks</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">SANOVIO <span class="date-badge">4 weeks ago</span></div>
+                    <div class="job-company">Founder's Associate</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4353750460/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">66/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Munich, Germany (On-site)</div></div>
+                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Founder's Associate</div></div>
+                <div class="detail"><div class="detail-label">Match</div><div class="detail-value">Top Applicant — likely to hear back</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">Jan 17, 2026</div></div>
+            </div>
+            <div class="source">Source: LinkedIn "More likely to hear back"</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Alpine Eagle <span class="date-badge">2 weeks ago</span></div>
+                    <div class="job-company">Founder's Associate (m/w/d)</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4337094476/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">68/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Munich, Germany</div></div>
+                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Founder's Associate</div></div>
+                <div class="detail"><div class="detail-label">Match</div><div class="detail-value">Top Applicant — likely to hear back</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">Jan 29, 2026</div></div>
+            </div>
+            <div class="source">Source: LinkedIn "More likely to hear back"</div>
+        </div>
+
+        <!-- ===== SAVED BY НАСТЯ ===== -->
+        <div class="section-title" style="border-color: #9c27b0; color: #9c27b0;">💾 Настя's LinkedIn Saved Jobs</div>
+
+        <div class="job-card" data-score="yellow" data-source="saved">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Relay Technologies <span class="date-badge" style="background:#f3e5f5;color:#9c27b0">Saved</span></div>
+                    <div class="job-company">Strategy and Operations Associate</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4317348986/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">72/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Greater London (Hybrid)</div></div>
+                <div class="detail"><div class="detail-label">Apply</div><div class="detail-value">Easy Apply</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">1 week ago</div></div>
+                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Strategy & Operations</div></div>
+            </div>
+            <div class="source">Source: Настя's LinkedIn Saved Jobs</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="saved">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Vial <span class="date-badge" style="background:#f3e5f5;color:#9c27b0">Saved</span></div>
+                    <div class="job-company">Manager - Strategy and Operations</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4344877183/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">74/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote 🌍</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully Remote</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">2 weeks ago</div></div>
+                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Strategy & Operations Manager</div></div>
+            </div>
+            <div class="source">Source: Настя's LinkedIn Saved Jobs</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="saved">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Blox Space <span class="date-badge" style="background:#f3e5f5;color:#9c27b0">Saved</span></div>
+                    <div class="job-company">Founders' Associate</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4366322389/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">66/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Metropolitan City of Turin (Hybrid)</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">2 weeks ago</div></div>
+                <div class="detail"><div class="detail-label">Role</div><div class="detail-value">Founders' Associate</div></div>
+            </div>
+            <div class="source">Source: Настя's LinkedIn Saved Jobs</div>
+        </div>
+
+        <!-- ===== YELLOW FROM SEARCH ===== -->
+        <div class="section-title new">🔍 Search — Today's Bot Finds</div>
+
+        <div class="job-card" data-score="yellow" data-source="search">
             <div class="job-header">
                 <div>
                     <div class="job-title">Beloy <span class="date-badge">NEW</span></div>
@@ -89,22 +308,49 @@
             </div>
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Paris, France (remote allowed?)</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">⚠️ Remote policy unclear (EU-wide?)</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Insurtech B2B</div></div>
                 <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
                 <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Corporate development + Strategy</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Startup (stage TBD)</div></div>
             </div>
-            <div class="warning">⚠️ Remote policy unclear — need to check if EU-wide remote is accepted</div>
-            <div style="margin-top: 12px;">
-                <button class="btn btn-huntr" onclick="addToHuntr(1)">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(1)">✕ Reject</button>
-            </div>
-            <div class="source">Source: Brave + WTTJ | Found: Feb 16, 2026</div>
+            <div class="warning">⚠️ Remote policy unclear</div>
+            <div class="source">Source: Brave + WTTJ</div>
         </div>
 
-        <!-- NEW: Nikan AI -->
-        <div class="job-card" id="job-2" data-score="yellow" data-date="new">
+        <div class="job-card" data-score="yellow" data-source="search">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Revolut <span class="date-badge old">Feb 15</span></div>
+                    <div class="job-company">Strategy & Operations Manager</div>
+                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/strategy-operations-manager-at-revolut-4359225027" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">82/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Switzerland 🇨🇭</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3+ years</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series E ($75B valuation)</div></div>
+            </div>
+            <div class="source">Source: ChatGPT + LinkedIn | Feb 15</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="search">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">True Wealth AG <span class="date-badge old">Feb 15</span></div>
+                    <div class="job-company">Founder's Associate (Temp, 40-60%)</div>
+                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/founder%E2%80%99s-associate-temporary-40%E2%80%9360%25-at-true-wealth-4354079655" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">78/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland 🇨🇭</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">>2 years</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A (Fintech)</div></div>
+            </div>
+            <div class="source">Source: ChatGPT + LinkedIn | Feb 15</div>
+        </div>
+
+        <div class="job-card" data-score="yellow" data-source="search">
             <div class="job-header">
                 <div>
                     <div class="job-title">Nikan AI Gruppe <span class="date-badge">NEW</span></div>
@@ -115,22 +361,13 @@
             </div>
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">100% Remote (Germany)</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ 100% Remote</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">AI startup ecosystem</div></div>
-                <div class="detail"><div class="detail-label">Contract</div><div class="detail-value">Permanent (unbefristet)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Operations</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Stage unknown</div></div>
             </div>
-            <div class="warning">⚠️ Job posting in German — German language likely required. Company stage unknown.</div>
-            <div style="margin-top: 12px;">
-                <button class="btn btn-huntr" onclick="addToHuntr(2)">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(2)">✕ Reject</button>
-            </div>
-            <div class="source">Source: Brave + Stepstone | Found: Feb 16, 2026</div>
+            <div class="warning">⚠️ Posting in German — language likely required</div>
+            <div class="source">Source: Brave + Stepstone</div>
         </div>
 
-        <!-- NEW: Mistral AI -->
-        <div class="job-card" id="job-3" data-score="yellow" data-date="new">
+        <div class="job-card" data-score="yellow" data-source="search">
             <div class="job-header">
                 <div>
                     <div class="job-title">Mistral AI <span class="date-badge">NEW</span></div>
@@ -141,25 +378,20 @@
             </div>
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Paris, France</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Distributed teams</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">AI (unicorn)</div></div>
                 <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">5+ years</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Ops (close to CoS)</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Unicorn (AI leader)</div></div>
             </div>
-            <div class="warning">⚠️ Not pure CoS but close. 5+ years required. Coding "nice-to-have".</div>
-            <div style="margin-top: 12px;">
-                <button class="btn btn-huntr" onclick="addToHuntr(3)">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(3)">✕ Reject</button>
-            </div>
-            <div class="source">Source: Brave + Lever | Found: Feb 16, 2026</div>
+            <div class="warning">⚠️ Not pure CoS. Coding "nice-to-have".</div>
+            <div class="source">Source: Brave + Lever</div>
         </div>
 
-        <!-- NEW: Expatrio (LinkedIn, validating) -->
-        <div class="job-card" id="job-4" data-score="pending" data-date="new">
+        <!-- ===== VALIDATING ===== -->
+        <div class="section-title" style="border-color: #1565c0; color: #1565c0;">🔵 Validating — LinkedIn Search (Task 2)</div>
+
+        <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Expatrio <span class="date-badge">NEW</span></div>
+                    <div class="job-title">Expatrio</div>
                     <div class="job-company">Chief of Staff (f/m/x)</div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
@@ -170,14 +402,13 @@
                 <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
                 <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Appears active</div></div>
             </div>
-            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
+            <div class="source">Source: LinkedIn Search (Task 2)</div>
         </div>
 
-        <!-- NEW: SumUp (LinkedIn, validating) -->
-        <div class="job-card" id="job-5" data-score="pending" data-date="new">
+        <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">SumUp <span class="date-badge">NEW</span></div>
+                    <div class="job-title">SumUp</div>
                     <div class="job-company">Chief of Staff</div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
@@ -186,16 +417,15 @@
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech (3000+ employees, Series B+)</div></div>
                 <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">Chief Hardware Officer</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">⚠️ Unverified (need to check if open)</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">⚠️ Unverified</div></div>
             </div>
-            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
+            <div class="source">Source: LinkedIn Search (Task 2)</div>
         </div>
 
-        <!-- NEW: Lano (LinkedIn, validating) -->
-        <div class="job-card" id="job-6" data-score="pending" data-date="new">
+        <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Lano <span class="date-badge">NEW</span></div>
+                    <div class="job-title">Lano</div>
                     <div class="job-company">Chief of Staff</div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
@@ -204,16 +434,15 @@
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">HR-tech, Series A+, remote-first</div></div>
                 <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO (implied)</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟡 Unverified (role details unclear)</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟡 Unverified</div></div>
             </div>
-            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
+            <div class="source">Source: LinkedIn Search (Task 2)</div>
         </div>
 
-        <!-- NEW: Cartloop (LinkedIn, validating) -->
-        <div class="job-card" id="job-7" data-score="pending" data-date="new">
+        <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Cartloop <span class="date-badge">NEW</span></div>
+                    <div class="job-title">Cartloop</div>
                     <div class="job-company">Chief of Staff (Remote)</div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
@@ -221,135 +450,36 @@
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">London, UK (Remote)</div></div>
                 <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Remote-first</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Startup</div></div>
                 <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Operating cadence, OKRs, team coordination</div></div>
             </div>
-            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
-        </div>
-
-        <div class="section-title">📋 Feb 15, 2026 — Previous</div>
-
-        <!-- OLD: Jua -->
-        <div class="job-card" id="job-8" data-score="green" data-date="old">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Jua <span class="date-badge old">Feb 15</span></div>
-                    <div class="job-company">Chief of Staff</div>
-                    <div class="job-link"><a href="https://example.com/jua-cos" target="_blank">🔗 View Job →</a></div>
-                </div>
-                <div class="job-score green">88/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Hybrid (flexible)</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3-5 years</div></div>
-                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Strategy + Operations</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A+ (AI/SaaS)</div></div>
-            </div>
-            <div style="margin-top: 12px;">
-                <button class="btn btn-huntr" onclick="addToHuntr(8)">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(8)">✕ Reject</button>
-            </div>
-            <div class="source">Source: Gemini | Found: Feb 15, 2026</div>
-        </div>
-
-        <!-- OLD: Revolut -->
-        <div class="job-card" id="job-9" data-score="yellow" data-date="old">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Revolut <span class="date-badge old">Feb 15</span></div>
-                    <div class="job-company">Strategy & Operations Manager</div>
-                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/strategy-operations-manager-at-revolut-4359225027" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">82/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Switzerland</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Unspecified (CH-based)</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3+ years</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series E ($75B valuation)</div></div>
-            </div>
-            <div style="margin-top: 12px;">
-                <button class="btn btn-huntr" onclick="addToHuntr(9)">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(9)">✕ Reject</button>
-            </div>
-            <div class="source">Source: ChatGPT + LinkedIn | Found: Feb 15, 2026</div>
-        </div>
-
-        <!-- OLD: True Wealth -->
-        <div class="job-card" id="job-10" data-score="yellow" data-date="old">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">True Wealth AG <span class="date-badge old">Feb 15</span></div>
-                    <div class="job-company">Founder's Associate (Temp, 40-60%)</div>
-                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/founder%E2%80%99s-associate-temporary-40%E2%80%9360%25-at-true-wealth-4354079655" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">78/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">>2 years</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A (Fintech)</div></div>
-            </div>
-            <div style="margin-top: 12px;">
-                <button class="btn btn-huntr" onclick="addToHuntr(10)">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(10)">✕ Reject</button>
-            </div>
-            <div class="source">Source: ChatGPT + LinkedIn | Found: Feb 15, 2026</div>
-        </div>
-
-        <!-- OLD: Revizto REJECTED -->
-        <div class="job-card rejected" id="job-11" data-score="red" data-date="old">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Revizto <span class="date-badge old">Feb 15</span></div>
-                    <div class="job-company">Sr. Manager GTM Strategy & Operations</div>
-                </div>
-                <div class="job-score red">REJECTED</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value"><span class="badge-red">❌ Remote (UK, DE, FR, ES only)</span></div></div>
-                <div class="detail"><div class="detail-label">Reason</div><div class="detail-value">Country-restricted remote</div></div>
-            </div>
-            <div class="source">Source: Brave | Found: Feb 15, 2026</div>
+            <div class="source">Source: LinkedIn Search (Task 2)</div>
         </div>
 
     </div>
 
     <script>
-        function addToHuntr(jobId) {
-            const card = document.getElementById(`job-${jobId}`);
-            const title = card.querySelector('.job-title').textContent.replace(/NEW|Feb \d+/g, '').trim();
-            const role = card.querySelector('.job-company').textContent;
-            alert(`✅ "${role}" at ${title} → will be added to Huntr automatically by Эмилио 🦀`);
-        }
-
-        function rejectJob(jobId) {
-            const card = document.getElementById(`job-${jobId}`);
-            card.classList.add('rejected');
-            updateCounts();
-        }
-
-        function updateCounts() {
-            const all = document.querySelectorAll('.job-card');
-            const rejected = document.querySelectorAll('.job-card.rejected');
-            document.getElementById('total').textContent = all.length;
-            document.getElementById('active').textContent = all.length - rejected.length;
-            document.getElementById('rejected-count').textContent = rejected.length;
-        }
-
         function filterJobs(type) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             document.querySelectorAll('.job-card').forEach(card => {
                 if (type === 'all') { card.classList.remove('hidden'); return; }
-                if (type === 'new') {
-                    card.classList.toggle('hidden', card.dataset.date !== 'new');
+                if (type === 'linkedin') {
+                    card.classList.toggle('hidden', card.dataset.source !== 'linkedin');
+                } else if (type === 'saved') {
+                    card.classList.toggle('hidden', card.dataset.source !== 'saved');
                 } else {
                     card.classList.toggle('hidden', card.dataset.score !== type);
                 }
+            });
+            // Also show/hide section titles
+            document.querySelectorAll('.section-title').forEach(title => {
+                let next = title.nextElementSibling;
+                let hasVisible = false;
+                while (next && !next.classList.contains('section-title')) {
+                    if (next.classList.contains('job-card') && !next.classList.contains('hidden')) hasVisible = true;
+                    next = next.nextElementSibling;
+                }
+                title.classList.toggle('hidden', !hasVisible);
             });
         }
     </script>
