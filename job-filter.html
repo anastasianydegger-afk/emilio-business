@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="build-date" content="2026-02-16T14:40:00Z">
-    <meta name="version" content="3.3-service-worker">
+    <meta name="build-date" content="2026-02-16T14:42:00Z">
+    <meta name="version" content="3.4-rejected-fixed">
     <title>🦀 Job Filter</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -87,12 +87,13 @@
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Feb 16, 2026 14:40 UTC — v3.3 with Service Worker + Auto Cache Invalidation</p>
+            <p class="subtitle">Feb 16, 2026 14:42 UTC — v3.4 with Rejected Positions Fixed + Cache Buster</p>
             <div class="stats">
-                <div><span class="stat-number">21</span>Total</div>
-                <div><span class="stat-number">2</span>🟢 GREEN</div>
+                <div><span class="stat-number">20</span>Total</div>
+                <div><span class="stat-number">0</span>🟢 GREEN</div>
                 <div><span class="stat-number">13</span>🟡 YELLOW</div>
                 <div><span class="stat-number">4</span>🔵 Validating</div>
+                <div><span class="stat-number">3</span>❌ Rejected</div>
             </div>
         </header>
 
@@ -109,24 +110,6 @@
 
         <!-- ===== GREEN ===== -->
         <div class="section-title new">🟢 GREEN (85+) — Рекомендуемые</div>
-
-        <div class="job-card" data-score="green" data-source="linkedin">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Thomson Reuters <span class="date-badge">✅ APPLIED Feb 16</span></div>
-                    <div class="job-company">Director, Product Strategy & Operations</div>
-                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4368045448/" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score green">88/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zug, Switzerland (Hybrid) 🇨🇭</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Hybrid</div></div>
-                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Legal/Financial Tech (Fortune 500)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Strategy & Operations</div></div>
-            </div>
-            <div class="source">Source: LinkedIn Recommendations | Настя moves to Zug May 2026</div>
-        </div>
 
         <!-- ===== YELLOW FROM LINKEDIN ===== -->
         <div class="section-title linkedin">💼 LinkedIn — New from Alerts & Recommendations</div>
@@ -481,12 +464,53 @@
             <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
         </div>
 
+        <!-- ===== REJECTED ===== -->
+        <div class="section-title" style="border-color: #e74c3c; color: #e74c3c; margin-top: 32px;">❌ Rejected — Отклоненные позиции</div>
+
+        <div class="job-card rejected" data-score="rejected" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Thomson Reuters <span class="date-badge">❌ REJECTED Feb 16</span></div>
+                    <div class="job-company">Director, Product Strategy & Operations</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4368045448/" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score red">88/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zug, Switzerland (Hybrid) 🇨🇭</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Hybrid</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Legal/Financial Tech (Fortune 500)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Strategy & Operations</div></div>
+            </div>
+            <div class="reject-reason">❌ Удалено: domain_specific (требует глубокого понимания legal technology)</div>
+            <div class="source">Source: LinkedIn Recommendations | Rejected Feb 16</div>
+        </div>
+
+        <div class="job-card rejected" data-score="rejected" data-source="linkedin">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Jua <span class="date-badge">❌ REJECTED Feb 16</span></div>
+                    <div class="job-company">Chief of Staff</div>
+                    <div class="job-link"><a href="https://www.linkedin.com/jobs/view/" target="_blank">Position archived</a></div>
+                </div>
+                <div class="job-score red">88/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland (Hybrid)</div></div>
+                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">~2 months ago (Feb 15 bump)</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">SaaS (AI/SaaS)</div></div>
+                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
+            </div>
+            <div class="reject-reason">❌ Удалено: too_old (нарушает правило max 5 дней)</div>
+            <div class="source">Source: LinkedIn Recommendations | Rejected Feb 16</div>
+        </div>
+
     </div>
 
     <script>
         // ===== AGGRESSIVE CACHE BUSTER =====
-        const CURRENT_VERSION = '3.3-service-worker';
-        const LAST_BUILD = '2026-02-16T14:40:00Z';
+        const CURRENT_VERSION = '3.4-rejected-fixed';
+        const LAST_BUILD = '2026-02-16T14:42:00Z';
         const storedVersion = localStorage.getItem('emilio_app_version');
         
         if (storedVersion !== CURRENT_VERSION) {
