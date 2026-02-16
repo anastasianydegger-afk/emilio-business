@@ -55,7 +55,7 @@
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Feb 16, 2026 14:53 UTC — v3.8 with Unified IDs & Proper Rejection Loading</p>
+            <p class="subtitle">Feb 16, 2026 17:22 UTC — v3.9 with Bug Fixes: No Duplicates + Stats Update + Data Preservation</p>
             <div class="stats">
                 <div><span class="stat-number" id="stat-new">0</span>🆕 Новые</div>
                 <div><span class="stat-number" id="stat-interested">0</span>❤️ Интересно</div>
@@ -77,14 +77,22 @@
 
     <script>
         // ===== VERSION & CACHE BUSTER =====
-        const CURRENT_VERSION = '3.8-unified-ids';
-        const LAST_BUILD = '2026-02-16T14:53:00Z';
+        const CURRENT_VERSION = '3.9-bugs-fixed';
+        const LAST_BUILD = '2026-02-16T17:22:00Z';
         const storedVersion = localStorage.getItem('emilio_app_version');
+        
+        // Preserve interests and rejections across version updates
+        const preservedRejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
+        const preservedInterests = JSON.parse(localStorage.getItem('emilio_interests') || '{}');
         
         if (storedVersion !== CURRENT_VERSION) {
             console.log(`🚀 Version ${storedVersion || 'none'} → ${CURRENT_VERSION}`);
             localStorage.clear();
             localStorage.setItem('emilio_app_version', CURRENT_VERSION);
+            // Restore preserved data
+            localStorage.setItem('emilio_rejections', JSON.stringify(preservedRejections));
+            localStorage.setItem('emilio_interests', JSON.stringify(preservedInterests));
+            localStorage.setItem('emilio_json_loaded', 'true');
             if ('caches' in window) {
                 caches.keys().then(names => names.forEach(name => caches.delete(name)));
             }
@@ -247,6 +255,9 @@
                 const status = card.dataset.status;
                 card.classList.toggle('hidden', status !== type);
             });
+            
+            // BUG FIX #2: Update stats after filter change
+            updateStats();
         }
 
         function updateStats() {
