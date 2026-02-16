@@ -16,7 +16,7 @@
         .subtitle { font-size: 13px; color: #999; }
         .stats { display: flex; gap: 30px; justify-content: center; margin-top: 16px; font-size: 13px; }
         .stat-number { font-weight: 600; margin-right: 6px; }
-        .filters { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+        .filters { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; align-items: center; }
         .filter-btn { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 12px; cursor: pointer; background: white; transition: all 0.2s; }
         .filter-btn:hover { border-color: #333; }
         .filter-btn.active { background: #333; color: white; border-color: #333; }
@@ -79,6 +79,7 @@
             <button class="filter-btn" onclick="filterJobs('pending')">🔵 Validating</button>
             <button class="filter-btn" onclick="filterJobs('linkedin')">💼 LinkedIn</button>
             <button class="filter-btn" onclick="filterJobs('saved')">💾 Saved</button>
+            <button class="filter-btn" onclick="exportToChat()" style="background:#f5f5f5;border-color:#ddd;margin-left:auto;">📋 Export</button>
         </div>
 
         <!-- ===== GREEN ===== -->
@@ -595,6 +596,32 @@
 
         // Export rejections for Эмилио to learn from
         window.exportRejections = () => JSON.stringify(rejections, null, 2);
+
+        function exportToChat() {
+            if (Object.keys(rejections).length === 0) {
+                alert('No rejections yet. Delete some positions first.');
+                return;
+            }
+
+            const text = JSON.stringify({
+                timestamp: new Date().toISOString(),
+                summary: `${Object.keys(rejections).length} positions rejected`,
+                rejections: rejections
+            }, null, 2);
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Copied! Paste in Telegram →');
+            }).catch(err => {
+                // Fallback: show as selectable text
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('✅ Copied! Paste in Telegram →');
+            });
+        }
     </script>
 </body>
 </html>
