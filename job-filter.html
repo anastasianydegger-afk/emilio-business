@@ -41,6 +41,18 @@
         .warning { font-size: 11px; color: #e65100; margin-top: 6px; padding: 6px 10px; background: #fff3e0; border-radius: 6px; }
         .rejected { opacity: 0.25; }
         .hidden { display: none; }
+        .actions { margin-top: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .btn { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; background: white; }
+        .btn:hover { border-color: #333; }
+        .btn-reject { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
+        .btn-reject:hover { background: #ffcdd2; }
+        .btn-save { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
+        .btn-save:hover { background: #c8e6c9; }
+        .comment-box { display: none; margin-top: 8px; width: 100%; }
+        .comment-box.show { display: flex; gap: 8px; }
+        .comment-box input { flex: 1; padding: 6px 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; }
+        .comment-box button { padding: 6px 12px; background: #c62828; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .reject-reason { font-size: 11px; color: #c62828; margin-top: 6px; font-style: italic; }
         .source { font-size: 10px; color: #ccc; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
         .section-title { font-size: 14px; font-weight: 600; margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e0e0e0; }
         .section-title.new { border-color: #1565c0; color: #1565c0; }
@@ -458,12 +470,111 @@
     </div>
 
     <script>
+        // Load saved rejections from localStorage
+        const rejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
+
+        // Inject action buttons into every card + apply saved rejections
+        document.querySelectorAll('.job-card').forEach((card, i) => {
+            const title = card.querySelector('.job-title')?.textContent?.replace(/NEW|Feb \d+|LinkedIn ⭐|Saved|\d+ (day|week|month)s? ago/g, '').trim();
+            const key = 'job_' + i;
+            card.dataset.key = key;
+
+            // Create actions div
+            const actions = document.createElement('div');
+            actions.className = 'actions';
+            actions.innerHTML = `
+                <button class="btn btn-reject" onclick="showRejectComment('${key}')">✕ Не подходит</button>
+                <button class="btn btn-save" onclick="keepJob('${key}')">✓ Интересно</button>
+            `;
+
+            // Create comment box
+            const commentBox = document.createElement('div');
+            commentBox.className = 'comment-box';
+            commentBox.id = 'comment_' + key;
+            commentBox.innerHTML = `
+                <input type="text" placeholder="Почему не подходит? (необязательно)" onkeydown="if(event.key==='Enter')rejectJob('${key}')">
+                <button onclick="rejectJob('${key}')">Удалить</button>
+            `;
+
+            // Insert before source
+            const source = card.querySelector('.source');
+            if (source) {
+                card.insertBefore(actions, source);
+                card.insertBefore(commentBox, source);
+            } else {
+                card.appendChild(actions);
+                card.appendChild(commentBox);
+            }
+
+            // Apply saved rejection
+            if (rejections[key]) {
+                card.classList.add('rejected');
+                const reason = document.createElement('div');
+                reason.className = 'reject-reason';
+                reason.textContent = '❌ Удалено' + (rejections[key].reason ? ': ' + rejections[key].reason : '');
+                actions.replaceWith(reason);
+                commentBox.remove();
+            }
+        });
+
+        function showRejectComment(key) {
+            document.getElementById('comment_' + key).classList.add('show');
+        }
+
+        function rejectJob(key) {
+            const card = document.querySelector(`[data-key="${key}"]`);
+            const input = document.querySelector(`#comment_${key} input`);
+            const reason = input ? input.value.trim() : '';
+            const title = card.querySelector('.job-title')?.textContent?.trim();
+            const company = card.querySelector('.job-company')?.textContent?.trim();
+
+            // Save rejection
+            rejections[key] = {
+                title: title,
+                role: company,
+                reason: reason,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem('emilio_rejections', JSON.stringify(rejections));
+
+            // Visual update
+            card.classList.add('rejected');
+            const actions = card.querySelector('.actions');
+            const commentBox = card.querySelector('.comment-box');
+            if (actions) {
+                const reasonDiv = document.createElement('div');
+                reasonDiv.className = 'reject-reason';
+                reasonDiv.textContent = '❌ Удалено' + (reason ? ': ' + reason : '');
+                actions.replaceWith(reasonDiv);
+            }
+            if (commentBox) commentBox.remove();
+
+            updateStats();
+        }
+
+        function keepJob(key) {
+            const card = document.querySelector(`[data-key="${key}"]`);
+            card.style.borderColor = '#4caf50';
+            card.style.borderWidth = '2px';
+            const btn = card.querySelector('.btn-save');
+            if (btn) { btn.textContent = '✓ Сохранено'; btn.disabled = true; }
+        }
+
+        function updateStats() {
+            const all = document.querySelectorAll('.job-card');
+            const rejected = document.querySelectorAll('.job-card.rejected');
+            const active = all.length - rejected.length;
+            document.querySelectorAll('.stat-number')[0].textContent = all.length;
+        }
+
         function filterJobs(type) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             document.querySelectorAll('.job-card').forEach(card => {
                 if (type === 'all') { card.classList.remove('hidden'); return; }
-                if (type === 'linkedin') {
+                if (type === 'rejected') {
+                    card.classList.toggle('hidden', !card.classList.contains('rejected'));
+                } else if (type === 'linkedin') {
                     card.classList.toggle('hidden', card.dataset.source !== 'linkedin');
                 } else if (type === 'saved') {
                     card.classList.toggle('hidden', card.dataset.source !== 'saved');
@@ -471,7 +582,6 @@
                     card.classList.toggle('hidden', card.dataset.score !== type);
                 }
             });
-            // Also show/hide section titles
             document.querySelectorAll('.section-title').forEach(title => {
                 let next = title.nextElementSibling;
                 let hasVisible = false;
@@ -482,6 +592,9 @@
                 title.classList.toggle('hidden', !hasVisible);
             });
         }
+
+        // Export rejections for Эмилио to learn from
+        window.exportRejections = () => JSON.stringify(rejections, null, 2);
     </script>
 </body>
 </html>
