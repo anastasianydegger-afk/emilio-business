@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="build-date" content="2026-02-16T14:50:00Z">
-    <meta name="version" content="3.6-new-structure">
+    <meta name="build-date" content="2026-02-16T14:52:00Z">
+    <meta name="version" content="3.7-auto-import">
     <title>🦀 Job Filter</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -58,7 +58,7 @@
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Feb 16, 2026 14:50 UTC — v3.6 with 4-Tab Structure</p>
+            <p class="subtitle">Feb 16, 2026 14:52 UTC — v3.7 with Auto-Import of Настя's 14 Rejections</p>
             <div class="stats">
                 <div><span class="stat-number" id="stat-new">13</span>🆕 Новые</div>
                 <div><span class="stat-number" id="stat-interested">0</span>❤️ Интересно</div>
@@ -82,8 +82,8 @@
 
     <script>
         // ===== VERSION & CACHE BUSTER =====
-        const CURRENT_VERSION = '3.6-new-structure';
-        const LAST_BUILD = '2026-02-16T14:50:00Z';
+        const CURRENT_VERSION = '3.7-auto-import';
+        const LAST_BUILD = '2026-02-16T14:52:00Z';
         const storedVersion = localStorage.getItem('emilio_app_version');
         
         if (storedVersion !== CURRENT_VERSION) {
@@ -98,8 +98,8 @@
         }
 
         // Load saved state from localStorage
-        const rejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
-        const interests = JSON.parse(localStorage.getItem('emilio_interests') || '{}');
+        let rejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
+        let interests = JSON.parse(localStorage.getItem('emilio_interests') || '{}');
         const filtered = JSON.parse(localStorage.getItem('emilio_filtered') || '{}');
 
         // Data: All 20 positions
@@ -139,6 +139,44 @@
             { id: 'filtered_0', title: 'Thomson Reuters', role: 'Director, Product Strategy & Operations', location: 'Zug, Switzerland (Hybrid)', score: '88/100', filter_reason: 'domain_specific: требует глубокого понимания legal technology и содержания контента', filtered: true },
             { id: 'filtered_1', title: 'Jua', role: 'Chief of Staff', location: 'Zurich, Switzerland', score: '88/100', salary: '€80K-100K', filter_reason: 'too_old: нарушает правило max 5 дней (posted 2+ months ago)', filtered: true }
         ];
+
+        // AUTO-LOAD Настя's rejections from her JSON (one-time import on first load)
+        const loadedFromJson = localStorage.getItem('emilio_json_imported');
+        if (!loadedFromJson) {
+            // Map her rejections by matching titles
+            const mapRejections = {
+                'rejected_0': { reason: 'франц маст (French required)' },
+                'rejected_1': { reason: 'blockchain and web3 (не соответствует)' },
+                'rejected_2': { reason: 'я к ним подавалась уже (already applied)' },
+                'rejected_3': { reason: 'Женева onsite + больше executive assistant (не pure CoS)' },
+                'rejected_4': { reason: '4 недели назад (too old)' },
+                'rejected_5': { reason: 'в Париже надо быть (onsite Paris)' },
+                'rejected_6': { reason: 'им нужны numbers people (data-focused)' },
+                'rejected_7': { reason: 'им срочно нужен + не в CH (urgent + not in Switzerland)' },
+                'rejected_8': { reason: 'странный вебсайт (unclear quality)' },
+                'rejected_9': { reason: 'On-site Paris (не подходит)' },
+                'rejected_10': { reason: 'No longer accepting applications (старая, 2 года)' },
+                'rejected_11': { reason: '3 года назад позиция была открыта (очень старая)' },
+                'rejected_12': { reason: 'тоже старая (очень старая)' },
+                'rejected_13': { reason: 'неактуальная (outdated link)' }
+            };
+
+            for (const [jobId, data] of Object.entries(mapRejections)) {
+                const job = allJobs.find(j => j.id === jobId);
+                if (job) {
+                    rejections[jobId] = {
+                        title: job.title,
+                        role: job.role,
+                        reason: data.reason,
+                        date: new Date().toISOString()
+                    };
+                }
+            }
+
+            localStorage.setItem('emilio_rejections', JSON.stringify(rejections));
+            localStorage.setItem('emilio_json_imported', 'true');
+            console.log('✅ Loaded Настя\'s 14 rejections from her JSON');
+        }
 
         // Render all jobs
         function renderJobs() {
