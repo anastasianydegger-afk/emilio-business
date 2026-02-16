@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="build-date" content="2026-02-16T14:52:00Z">
-    <meta name="version" content="3.7-auto-import">
+    <meta name="build-date" content="2026-02-16T14:53:00Z">
+    <meta name="version" content="3.8-unified-ids">
     <title>🦀 Job Filter</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,13 +30,10 @@
         .job-link a { color: #0066cc; text-decoration: none; }
         .job-link a:hover { text-decoration: underline; }
         .job-score { display: inline-block; background: #f0f0f0; padding: 4px 10px; border-radius: 16px; font-size: 11px; font-weight: 600; }
-        .job-score.green { background: #e8f5e9; color: #2e7d32; }
-        .job-score.yellow { background: #fff3e0; color: #e65100; }
         .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
         .detail { display: flex; flex-direction: column; gap: 2px; }
         .detail-label { font-size: 10px; color: #999; text-transform: uppercase; font-weight: 500; }
         .detail-value { font-size: 13px; }
-        .warning { font-size: 11px; color: #e65100; margin: 8px 0; padding: 8px 12px; background: #fff3e0; border-radius: 6px; }
         .hidden { display: none !important; }
         .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
         .btn { padding: 6px 14px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; background: white; }
@@ -46,147 +43,120 @@
         .btn-reject { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
         .btn-reject:hover { background: #ffcdd2; }
         .reject-reason { font-size: 12px; color: #c62828; margin-top: 8px; padding: 8px 12px; background: #ffebee; border-radius: 6px; font-weight: 500; }
+        .filter-reason { font-size: 12px; color: #1565c0; margin-top: 8px; padding: 8px 12px; background: #e3f2fd; border-radius: 6px; font-weight: 500; }
         .comment-box { display: none; margin-top: 8px; gap: 8px; width: 100%; }
         .comment-box.show { display: flex; }
         .comment-box input { flex: 1; padding: 6px 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; }
         .comment-box button { padding: 6px 12px; background: #c62828; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
         .source { font-size: 10px; color: #ccc; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
-        .section-label { font-size: 13px; color: #999; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0; font-weight: 500; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Feb 16, 2026 14:52 UTC — v3.7 with Auto-Import of Настя's 14 Rejections</p>
+            <p class="subtitle">Feb 16, 2026 14:53 UTC — v3.8 with Unified IDs & Proper Rejection Loading</p>
             <div class="stats">
-                <div><span class="stat-number" id="stat-new">13</span>🆕 Новые</div>
+                <div><span class="stat-number" id="stat-new">0</span>🆕 Новые</div>
                 <div><span class="stat-number" id="stat-interested">0</span>❤️ Интересно</div>
-                <div><span class="stat-number" id="stat-rejected">14</span>❌ Отклонено</div>
-                <div><span class="stat-number" id="stat-filtered">2</span>🤖 Отфильтровано</div>
+                <div><span class="stat-number" id="stat-rejected">0</span>❌ Отклонено</div>
+                <div><span class="stat-number" id="stat-filtered">0</span>🤖 Отфильтровано</div>
             </div>
         </header>
 
         <div class="filters">
-            <button class="filter-btn active" onclick="filterJobs('new')">🆕 Новые (13)</button>
-            <button class="filter-btn" onclick="filterJobs('interested')">❤️ Интересно (0)</button>
-            <button class="filter-btn" onclick="filterJobs('rejected')">❌ Отклонено (14)</button>
-            <button class="filter-btn" onclick="filterJobs('filtered')">🤖 Отфильтровано (2)</button>
+            <button class="filter-btn active" onclick="filterJobs('new')">🆕 Новые</button>
+            <button class="filter-btn" onclick="filterJobs('interested')">❤️ Интересно</button>
+            <button class="filter-btn" onclick="filterJobs('rejected')">❌ Отклонено</button>
+            <button class="filter-btn" onclick="filterJobs('filtered')">🤖 Отфильтровано</button>
             <button class="filter-btn" onclick="exportToChat()" style="background:#f5f5f5;border-color:#ddd;margin-left:auto;">📋 Export</button>
         </div>
 
-        <!-- ===== POSITIONS CONTAINER ===== -->
-        <div id="positions-container">
-        </div>
+        <div id="positions-container"></div>
     </div>
 
     <script>
         // ===== VERSION & CACHE BUSTER =====
-        const CURRENT_VERSION = '3.7-auto-import';
-        const LAST_BUILD = '2026-02-16T14:52:00Z';
+        const CURRENT_VERSION = '3.8-unified-ids';
+        const LAST_BUILD = '2026-02-16T14:53:00Z';
         const storedVersion = localStorage.getItem('emilio_app_version');
         
         if (storedVersion !== CURRENT_VERSION) {
-            console.log(`🚀 Version update: ${storedVersion || 'none'} → ${CURRENT_VERSION}`);
+            console.log(`🚀 Version ${storedVersion || 'none'} → ${CURRENT_VERSION}`);
             localStorage.clear();
             localStorage.setItem('emilio_app_version', CURRENT_VERSION);
             if ('caches' in window) {
-                caches.keys().then(names => {
-                    names.forEach(name => caches.delete(name));
-                });
+                caches.keys().then(names => names.forEach(name => caches.delete(name)));
             }
         }
 
-        // Load saved state from localStorage
-        let rejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
-        let interests = JSON.parse(localStorage.getItem('emilio_interests') || '{}');
-        const filtered = JSON.parse(localStorage.getItem('emilio_filtered') || '{}');
-
-        // Data: All 20 positions
+        // All 20 unique positions with UNIFIED IDs
         const allJobs = [
-            // НОВЫЕ (13) - необработанные позиции
-            { id: 'new_0', title: 'Options Group', role: '(Senior) Chief of Staff (m/f/d)', location: 'Frankfurt, Germany (Hybrid)', score: '76/100', link: 'https://www.linkedin.com/jobs/view/4364770693/', category: 'new' },
-            { id: 'new_1', title: 'Alpine Eagle', role: 'Founder\'s Associate (m/w/d)', location: 'Basel, Switzerland', score: '68/100', link: 'https://www.linkedin.com/jobs/view/4337094476/', category: 'new' },
-            { id: 'new_2', title: 'Relay', role: 'CoS (Venture-backed)', location: 'Remote (EU)', score: '72/100', link: 'https://careers.relay.app/', category: 'new' },
-            { id: 'new_3', title: 'Vial', role: 'Chief of Staff, Commercial', location: 'Remote (EU)', score: '74/100', link: 'https://careers.vial.team/', category: 'new' },
-            { id: 'new_4', title: 'Blox Space', role: 'Operations Manager', location: 'Remote (EU)', score: '66/100', link: 'https://careers.bloxspace.io/', category: 'new' },
-            { id: 'new_5', title: 'Revolut (Applied)', role: 'Strategy & Operations Manager', location: 'Switzerland', score: '82/100', link: 'https://www.linkedin.com/jobs/view/', category: 'new', warning: 'Already applied - recheck status' },
-            { id: 'new_6', title: 'Mistral AI (France)', role: 'Product Ops Manager', location: 'Paris, France', score: '70/100', link: 'https://careers.mistral.ai/', category: 'new' },
-            { id: 'new_7', title: 'Beloy', role: 'Chief of Staff', location: 'Paris, France', score: '78/100', link: 'https://wttj.co/jobs/jobs-paris-chief-of-staff-at-beloy', category: 'new' },
-            { id: 'new_8', title: 'Expatrio', role: 'Chief of Staff (f/m/x)', location: 'Berlin, Germany', score: '68/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-f-m-x-at-expatrio-3737917498', category: 'new' },
-            { id: 'new_9', title: 'SumUp', role: 'Chief of Staff', location: 'Berlin, Germany', score: '70/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-at-sumup-3426376880', category: 'new' },
-            { id: 'new_10', title: 'Lano', role: 'Chief of Staff', location: 'Berlin, Germany (Remote-first)', score: '72/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-at-lano-3697227655', category: 'new' },
-            { id: 'new_11', title: 'Cartloop', role: 'Chief of Staff (Remote)', location: 'London, UK (Fully Remote)', score: '68/100', link: 'https://uk.linkedin.com/jobs/view/chief-of-staff-remote-at-cartloop-2791006327', category: 'new' },
-            { id: 'new_12', title: 'Nikan AI Gruppe', role: 'CoS Operations', location: 'Zurich, Switzerland', score: '68/100', link: 'https://nikan-ai.com/', category: 'new' },
+            // Jobs 0-12: Новые (необработанные)
+            { id: 'job_0', title: 'Options Group', role: '(Senior) Chief of Staff (m/f/d)', location: 'Frankfurt, Germany (Hybrid)', score: '76/100', link: 'https://www.linkedin.com/jobs/view/4364770693/' },
+            { id: 'job_1', title: 'Alpine Eagle', role: 'Founder\'s Associate (m/w/d)', location: 'Basel, Switzerland', score: '68/100', link: 'https://www.linkedin.com/jobs/view/4337094476/' },
+            { id: 'job_2', title: 'Relay', role: 'CoS (Venture-backed)', location: 'Remote (EU)', score: '72/100', link: 'https://careers.relay.app/' },
+            { id: 'job_3', title: 'Vial', role: 'Chief of Staff, Commercial', location: 'Remote (EU)', score: '74/100', link: 'https://careers.vial.team/' },
+            { id: 'job_4', title: 'Blox Space', role: 'Operations Manager', location: 'Remote (EU)', score: '66/100', link: 'https://careers.bloxspace.io/' },
+            { id: 'job_5', title: 'Revolut', role: 'Strategy & Operations Manager', location: 'Switzerland', score: '82/100', link: 'https://www.linkedin.com/jobs/view/' },
+            { id: 'job_6', title: 'Mistral AI', role: 'Product Ops Manager', location: 'Paris, France', score: '70/100', link: 'https://careers.mistral.ai/' },
+            { id: 'job_7', title: 'Beloy', role: 'Chief of Staff', location: 'Paris, France', score: '78/100', link: 'https://wttj.co/jobs/jobs-paris-chief-of-staff-at-beloy' },
+            { id: 'job_8', title: 'Expatrio', role: 'Chief of Staff (f/m/x)', location: 'Berlin, Germany', score: '68/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-f-m-x-at-expatrio-3737917498' },
+            { id: 'job_9', title: 'SumUp', role: 'Chief of Staff', location: 'Berlin, Germany', score: '70/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-at-sumup-3426376880' },
+            { id: 'job_10', title: 'Lano', role: 'Chief of Staff', location: 'Berlin, Germany (Remote-first)', score: '72/100', link: 'https://de.linkedin.com/jobs/view/chief-of-staff-at-lano-3697227655' },
+            { id: 'job_11', title: 'Cartloop', role: 'Chief of Staff (Remote)', location: 'London, UK (Fully Remote)', score: '68/100', link: 'https://uk.linkedin.com/jobs/view/chief-of-staff-remote-at-cartloop-2791006327' },
+            { id: 'job_12', title: 'Nikan AI Gruppe', role: 'CoS Operations', location: 'Zurich, Switzerland', score: '68/100', link: 'https://nikan-ai.com/' },
 
-            // ОТКЛОНЕНО (14) - уже отклоненные Настей
-            { id: 'rejected_0', title: 'Wave Mobile Money', role: 'Chief of Staff to CEO', reason: 'франц маст (French required)', rejected: true },
-            { id: 'rejected_1', title: 'Consensys / MetaMask', role: 'Senior Product Operations Manager', reason: 'blockchain and web3 (не соответствует)', rejected: true },
-            { id: 'rejected_2', title: 'Tacto', role: 'Strategy & Operations - Product Growth', reason: 'я к ним подавалась уже (already applied)', rejected: true },
-            { id: 'rejected_3', title: 'Rhone Trust', role: 'Senior Business Manager & Corporate Governance Officer', reason: 'Женева onsite + больше executive assistant (не pure CoS)', rejected: true },
-            { id: 'rejected_4', title: 'SANOVIO', role: 'Founder\'s Associate', reason: '4 недели назад (too old)', rejected: true },
-            { id: 'rejected_5', title: 'Beloy (Paris)', role: 'Chief of Staff', reason: 'в Париже надо быть (onsite Paris, не подходит)', rejected: true },
-            { id: 'rejected_6', title: 'Revolut', role: 'Strategy & Operations Manager', reason: 'им нужны numbers people (data-focused, не подходит)', rejected: true },
-            { id: 'rejected_7', title: 'True Wealth AG', role: 'Founder\'s Associate (Temp, 40-60%)', reason: 'им срочно нужен + не в CH (urgent + Настя не в Швейцарии)', rejected: true },
-            { id: 'rejected_8', title: 'Nikan AI Gruppe', role: 'CoS Operations', reason: 'странный вебсайт (unclear quality)', rejected: true },
-            { id: 'rejected_9', title: 'Mistral AI', role: 'Product Ops Manager', reason: 'On-site Paris (не подходит)', rejected: true },
-            { id: 'rejected_10', title: 'Expatrio', role: 'Chief of Staff (f/m/x)', reason: 'No longer accepting applications (старая, 2 года)', rejected: true },
-            { id: 'rejected_11', title: 'SumUp', role: 'Chief of Staff', reason: '3 года назад позиция была открыта (очень старая)', rejected: true },
-            { id: 'rejected_12', title: 'Lano', role: 'Chief of Staff', reason: 'тоже старая (очень старая)', rejected: true },
-            { id: 'rejected_13', title: 'Cartloop', role: 'Chief of Staff (Remote)', reason: 'неактуальная (outdated link)', rejected: true },
+            // Jobs 13-26: Отклонено (14 из JSON Насти)
+            { id: 'job_13', title: 'Wave Mobile Money', role: 'Chief of Staff to CEO', location: 'Remote (GMT-3 to GMT+3)', score: '72/100', rejected_reason: 'франц маст (French required)' },
+            { id: 'job_14', title: 'Consensys / MetaMask', role: 'Senior Product Operations Manager', location: 'EMEA (Remote)', score: '74/100', rejected_reason: 'blockchain and web3 (не соответствует)' },
+            { id: 'job_15', title: 'Tacto', role: 'Strategy & Operations - Product Growth', location: 'Munich, Germany (Hybrid)', score: '70/100', rejected_reason: 'я к ним подавалась уже (already applied)' },
+            { id: 'job_16', title: 'Rhone Trust', role: 'Senior Business Manager & Corporate Governance Officer', location: 'Geneva, Switzerland (On-site)', score: '68/100', rejected_reason: 'Женева onsite + больше executive assistant (не pure CoS)' },
+            { id: 'job_17', title: 'SANOVIO', role: 'Founder\'s Associate', location: 'Munich, Germany (On-site)', score: '66/100', rejected_reason: '4 недели назад (too old)' },
+            { id: 'job_18', title: 'True Wealth AG', role: 'Founder\'s Associate (Temp, 40-60%)', location: 'Zurich, Switzerland', score: '78/100', rejected_reason: 'им срочно нужен + не в CH (urgent + not in Switzerland)' },
+            { id: 'job_19', title: 'Revolut (Strategy)', role: 'Strategy & Operations Manager', location: 'Switzerland', score: '82/100', rejected_reason: 'им нужны numbers people (data-focused)' },
+            { id: 'job_20', title: 'Nikan AI (rejected)', role: 'CoS Operations', location: 'Zurich, Switzerland', score: '68/100', rejected_reason: 'странный вебсайт (unclear quality)' },
+            { id: 'job_21', title: 'Beloy (Paris)', role: 'Chief of Staff', location: 'Paris, France', score: '78/100', rejected_reason: 'в Париже надо быть (onsite Paris)' },
+            { id: 'job_22', title: 'Mistral AI (Paris)', role: 'Product Ops Manager', location: 'Paris, France', score: '70/100', rejected_reason: 'On-site Paris (не подходит)' },
+            { id: 'job_23', title: 'Expatrio (closed)', role: 'Chief of Staff (f/m/x)', location: 'Berlin, Germany', score: '68/100', rejected_reason: 'No longer accepting applications (старая, 2 года)' },
+            { id: 'job_24', title: 'SumUp (old)', role: 'Chief of Staff', location: 'Berlin, Germany', score: '70/100', rejected_reason: '3 года назад позиция была открыта (очень старая)' },
+            { id: 'job_25', title: 'Lano (old)', role: 'Chief of Staff', location: 'Berlin, Germany (Remote-first)', score: '72/100', rejected_reason: 'тоже старая (очень старая)' },
+            { id: 'job_26', title: 'Cartloop (outdated)', role: 'Chief of Staff (Remote)', location: 'London, UK (Fully Remote)', score: '68/100', rejected_reason: 'неактуальная (outdated link)' },
 
-            // ОТФИЛЬТРОВАНО (2) - Я отфильтровал
-            { id: 'filtered_0', title: 'Thomson Reuters', role: 'Director, Product Strategy & Operations', location: 'Zug, Switzerland (Hybrid)', score: '88/100', filter_reason: 'domain_specific: требует глубокого понимания legal technology и содержания контента', filtered: true },
-            { id: 'filtered_1', title: 'Jua', role: 'Chief of Staff', location: 'Zurich, Switzerland', score: '88/100', salary: '€80K-100K', filter_reason: 'too_old: нарушает правило max 5 дней (posted 2+ months ago)', filtered: true }
+            // Jobs 27-28: Отфильтровано (2 шт - мои фильтры)
+            { id: 'job_27', title: 'Thomson Reuters', role: 'Director, Product Strategy & Operations', location: 'Zug, Switzerland (Hybrid)', score: '88/100', filtered: true, filter_reason: 'domain_specific: требует глубокого понимания legal technology' },
+            { id: 'job_28', title: 'Jua', role: 'Chief of Staff', location: 'Zurich, Switzerland', score: '88/100', salary: '€80K-100K', filtered: true, filter_reason: 'too_old: нарушает правило max 5 дней (posted 2+ months ago)' }
         ];
 
-        // AUTO-LOAD Настя's rejections from her JSON (one-time import on first load)
-        const loadedFromJson = localStorage.getItem('emilio_json_imported');
-        if (!loadedFromJson) {
-            // Map her rejections by matching titles
-            const mapRejections = {
-                'rejected_0': { reason: 'франц маст (French required)' },
-                'rejected_1': { reason: 'blockchain and web3 (не соответствует)' },
-                'rejected_2': { reason: 'я к ним подавалась уже (already applied)' },
-                'rejected_3': { reason: 'Женева onsite + больше executive assistant (не pure CoS)' },
-                'rejected_4': { reason: '4 недели назад (too old)' },
-                'rejected_5': { reason: 'в Париже надо быть (onsite Paris)' },
-                'rejected_6': { reason: 'им нужны numbers people (data-focused)' },
-                'rejected_7': { reason: 'им срочно нужен + не в CH (urgent + not in Switzerland)' },
-                'rejected_8': { reason: 'странный вебсайт (unclear quality)' },
-                'rejected_9': { reason: 'On-site Paris (не подходит)' },
-                'rejected_10': { reason: 'No longer accepting applications (старая, 2 года)' },
-                'rejected_11': { reason: '3 года назад позиция была открыта (очень старая)' },
-                'rejected_12': { reason: 'тоже старая (очень старая)' },
-                'rejected_13': { reason: 'неактуальная (outdated link)' }
-            };
+        // Load state from localStorage
+        let rejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
+        let interests = JSON.parse(localStorage.getItem('emilio_interests') || '{}');
 
-            for (const [jobId, data] of Object.entries(mapRejections)) {
-                const job = allJobs.find(j => j.id === jobId);
-                if (job) {
-                    rejections[jobId] = {
+        // Auto-populate rejections from job data on first load
+        const jsonLoaded = localStorage.getItem('emilio_json_loaded');
+        if (!jsonLoaded) {
+            allJobs.forEach(job => {
+                if (job.rejected_reason) {
+                    rejections[job.id] = {
                         title: job.title,
                         role: job.role,
-                        reason: data.reason,
+                        reason: job.rejected_reason,
                         date: new Date().toISOString()
                     };
                 }
-            }
-
+            });
             localStorage.setItem('emilio_rejections', JSON.stringify(rejections));
-            localStorage.setItem('emilio_json_imported', 'true');
-            console.log('✅ Loaded Настя\'s 14 rejections from her JSON');
+            localStorage.setItem('emilio_json_loaded', 'true');
+            console.log('✅ Auto-loaded 14 rejections from job data');
         }
 
-        // Render all jobs
         function renderJobs() {
             const container = document.getElementById('positions-container');
             container.innerHTML = '';
 
-            allJobs.forEach((job, idx) => {
-                const key = job.id;
-                const isRejected = rejections[key];
-                const isInterested = interests[key];
+            allJobs.forEach(job => {
+                const isRejected = rejections[job.id];
+                const isInterested = interests[job.id];
                 const isFiltered = job.filtered;
 
                 let status = 'new';
@@ -196,7 +166,7 @@
 
                 const card = document.createElement('div');
                 card.className = 'job-card';
-                card.dataset.key = key;
+                card.dataset.key = job.id;
                 card.dataset.status = status;
 
                 let html = `
@@ -211,29 +181,24 @@
                 `;
 
                 if (job.location) {
-                    html += `<div class="job-details">
-                        <div class="detail"><div class="detail-label">Location</div><div class="detail-value">${job.location}</div></div>
-                    </div>`;
+                    html += `<div class="job-details"><div class="detail"><div class="detail-label">Location</div><div class="detail-value">${job.location}</div></div></div>`;
                 }
 
-                if (job.warning) {
-                    html += `<div class="warning">⚠️ ${job.warning}</div>`;
-                }
-
+                // Show reason (reject or filter)
                 if (isRejected) {
                     html += `<div class="reject-reason">❌ ${isRejected.reason || 'Rejected'}</div>`;
                 } else if (isFiltered && job.filter_reason) {
-                    html += `<div class="reject-reason">🤖 ${job.filter_reason}</div>`;
-                } else if (!isFiltered && !isRejected) {
+                    html += `<div class="filter-reason">🤖 ${job.filter_reason}</div>`;
+                } else {
                     // Show action buttons only for unprocessed jobs
                     html += `
                         <div class="actions">
-                            <button class="btn btn-save" onclick="markInterested('${key}')">❤️ Интересно</button>
-                            <button class="btn btn-reject" onclick="showRejectComment('${key}')">❌ Не подходит</button>
+                            <button class="btn btn-save" onclick="markInterested('${job.id}')">❤️ Интересно</button>
+                            <button class="btn btn-reject" onclick="showRejectComment('${job.id}')">❌ Не подходит</button>
                         </div>
-                        <div class="comment-box" id="comment_${key}">
-                            <input type="text" placeholder="Причина отклонения...">
-                            <button onclick="rejectJob('${key}')">✓ Сохранить</button>
+                        <div class="comment-box" id="comment_${job.id}">
+                            <input type="text" placeholder="Причина...">
+                            <button onclick="rejectJob('${job.id}')">✓ OK</button>
                         </div>
                     `;
                 }
@@ -245,28 +210,32 @@
             updateStats();
         }
 
-        function markInterested(key) {
-            interests[key] = { title: allJobs.find(j => j.id === key)?.title, date: new Date().toISOString() };
+        function markInterested(id) {
+            interests[id] = { title: allJobs.find(j => j.id === id)?.title, date: new Date().toISOString() };
+            delete rejections[id];
             localStorage.setItem('emilio_interests', JSON.stringify(interests));
+            localStorage.setItem('emilio_rejections', JSON.stringify(rejections));
             renderJobs();
         }
 
-        function showRejectComment(key) {
-            document.getElementById(`comment_${key}`).classList.add('show');
+        function showRejectComment(id) {
+            document.getElementById(`comment_${id}`).classList.add('show');
         }
 
-        function rejectJob(key) {
-            const input = document.querySelector(`#comment_${key} input`);
+        function rejectJob(id) {
+            const input = document.querySelector(`#comment_${id} input`);
             const reason = input?.value.trim() || '(no reason)';
-            const job = allJobs.find(j => j.id === key);
+            const job = allJobs.find(j => j.id === id);
 
-            rejections[key] = {
+            rejections[id] = {
                 title: job.title,
                 role: job.role,
                 reason: reason,
                 date: new Date().toISOString()
             };
+            delete interests[id];
             localStorage.setItem('emilio_rejections', JSON.stringify(rejections));
+            localStorage.setItem('emilio_interests', JSON.stringify(interests));
             renderJobs();
         }
 
@@ -276,44 +245,35 @@
 
             document.querySelectorAll('[data-status]').forEach(card => {
                 const status = card.dataset.status;
-                if (type === 'new') {
-                    card.classList.toggle('hidden', status !== 'new');
-                } else if (type === 'interested') {
-                    card.classList.toggle('hidden', status !== 'interested');
-                } else if (type === 'rejected') {
-                    card.classList.toggle('hidden', status !== 'rejected');
-                } else if (type === 'filtered') {
-                    card.classList.toggle('hidden', status !== 'filtered');
-                }
+                card.classList.toggle('hidden', status !== type);
             });
         }
 
         function updateStats() {
-            let newCount = 0, interestedCount = 0, rejectedCount = 0;
+            let newCount = 0, interestedCount = 0, rejectedCount = 0, filteredCount = 0;
             allJobs.forEach(job => {
-                const key = job.id;
-                if (rejections[key]) rejectedCount++;
-                else if (interests[key]) interestedCount++;
-                else if (!job.filtered) newCount++;
+                if (job.filtered) filteredCount++;
+                else if (rejections[job.id]) rejectedCount++;
+                else if (interests[job.id]) interestedCount++;
+                else newCount++;
             });
             document.getElementById('stat-new').textContent = newCount;
             document.getElementById('stat-interested').textContent = interestedCount;
             document.getElementById('stat-rejected').textContent = rejectedCount;
+            document.getElementById('stat-filtered').textContent = filteredCount;
         }
 
         function exportToChat() {
             const data = {
                 timestamp: new Date().toISOString(),
-                stats: { new: document.getElementById('stat-new').textContent, interested: document.getElementById('stat-interested').textContent, rejected: document.getElementById('stat-rejected').textContent },
                 rejections: rejections,
                 interests: interests
             };
             navigator.clipboard.writeText(JSON.stringify(data, null, 2)).then(() => {
-                alert('✅ Exported! Paste in Telegram');
+                alert('✅ Exported!');
             });
         }
 
-        // Initial render
         renderJobs();
     </script>
 </body>
