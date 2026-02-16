@@ -48,6 +48,23 @@
         .btn-reject:hover { background: #ffcdd2; }
         .btn-save { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
         .btn-save:hover { background: #c8e6c9; }
+        .btn-validate { background: #e8eaf6; color: #3f51b5; border-color: #c5cae9; }
+        .btn-validate:hover { background: #c5cae9; }
+        .validate-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .validate-modal.show { display: flex; }
+        .validate-modal-content { background: white; padding: 24px; border-radius: 8px; width: 90%; max-width: 400px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+        .validate-modal h2 { margin-bottom: 16px; font-size: 16px; }
+        .validate-modal p { margin-bottom: 12px; font-size: 12px; color: #666; }
+        .validate-modal-buttons { display: flex; gap: 8px; margin-top: 16px; }
+        .validate-modal-buttons button { flex: 1; padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .validate-modal-buttons button.open { background: #e3f2fd; color: #1565c0; border-color: #bbdefb; }
+        .validate-modal-buttons button.open:hover { background: #bbdefb; }
+        .validate-modal-buttons button.valid { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
+        .validate-modal-buttons button.valid:hover { background: #c8e6c9; }
+        .validate-modal-buttons button.closed { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
+        .validate-modal-buttons button.closed:hover { background: #ffcdd2; }
+        .validate-modal-buttons button.unclear { background: #fff3e0; color: #e65100; border-color: #ffe0b2; }
+        .validate-modal-buttons button.unclear:hover { background: #ffe0b2; }
         .comment-box { display: none; margin-top: 8px; width: 100%; }
         .comment-box.show { display: flex; gap: 8px; }
         .comment-box input { flex: 1; padding: 6px 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; }
@@ -484,6 +501,7 @@
             const actions = document.createElement('div');
             actions.className = 'actions';
             actions.innerHTML = `
+                <button class="btn btn-validate" onclick="showValidateModal('${key}')">🔍 Validate</button>
                 <button class="btn btn-reject" onclick="showRejectComment('${key}')">✕ Не подходит</button>
                 <button class="btn btn-save" onclick="keepJob('${key}')">✓ Интересно</button>
             `;
@@ -594,19 +612,83 @@
             });
         }
 
+        // Validation tracking
+        const validations = JSON.parse(localStorage.getItem('emilio_validations') || '{}');
+
+        function showValidateModal(key) {
+            const card = document.querySelector(`[data-key="${key}"]`);
+            const title = card.querySelector('.job-title')?.textContent?.trim();
+            const role = card.querySelector('.job-company')?.textContent?.trim();
+            const url = card.querySelector('a[href*="linkedin.com"], a[href*="lever.co"], a[href*="welcometothejungle"]')?.href || 'No URL';
+            
+            const modal = document.getElementById('validate-modal') || createValidateModal();
+            modal.dataset.key = key;
+            modal.querySelector('.validate-modal-content p').textContent = `${title} — ${role}`;
+            modal.classList.add('show');
+        }
+
+        function createValidateModal() {
+            const modal = document.createElement('div');
+            modal.id = 'validate-modal';
+            modal.className = 'validate-modal';
+            modal.innerHTML = `
+                <div class="validate-modal-content">
+                    <h2>Validate Position</h2>
+                    <p></p>
+                    <div class="validate-modal-buttons">
+                        <button class="open" onclick="saveValidation('open')">✅ Open</button>
+                        <button class="valid" onclick="saveValidation('valid')">✓ Valid</button>
+                        <button class="closed" onclick="saveValidation('closed')">❌ Closed</button>
+                        <button class="unclear" onclick="saveValidation('unclear')">❓ Unclear</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            return modal;
+        }
+
+        function saveValidation(status) {
+            const modal = document.getElementById('validate-modal');
+            const key = modal.dataset.key;
+            validations[key] = { status: status, timestamp: new Date().toISOString() };
+            localStorage.setItem('emilio_validations', JSON.stringify(validations));
+            closeValidateModal();
+            
+            const card = document.querySelector(`[data-key="${key}"]`);
+            const btn = card.querySelector('.btn-validate');
+            btn.textContent = `✓ ${status === 'open' ? '📂' : status === 'closed' ? '❌' : '✓'} ${status.toUpperCase()}`;
+            btn.disabled = true;
+        }
+
+        function closeValidateModal() {
+            const modal = document.getElementById('validate-modal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('validate-modal');
+            if (modal && e.target === modal) closeValidateModal();
+        });
+
         // Export rejections for Эмилио to learn from
         window.exportRejections = () => JSON.stringify(rejections, null, 2);
+        window.exportValidations = () => JSON.stringify(validations, null, 2);
 
         function exportToChat() {
-            if (Object.keys(rejections).length === 0) {
-                alert('No rejections yet. Delete some positions first.');
+            const hasRejections = Object.keys(rejections).length > 0;
+            const hasValidations = Object.keys(validations).length > 0;
+            
+            if (!hasRejections && !hasValidations) {
+                alert('No rejections or validations yet.');
                 return;
             }
 
             const text = JSON.stringify({
                 timestamp: new Date().toISOString(),
-                summary: `${Object.keys(rejections).length} positions rejected`,
-                rejections: rejections
+                summary: `${Object.keys(rejections).length} rejected, ${Object.keys(validations).length} validated`,
+                rejections: hasRejections ? rejections : {},
+                validations: hasValidations ? validations : {}
             }, null, 2);
 
             navigator.clipboard.writeText(text).then(() => {
