@@ -16,6 +16,12 @@
         .subtitle { font-size: 14px; color: #999; }
         .stats { display: flex; gap: 40px; justify-content: center; margin-top: 20px; font-size: 14px; }
         .stat-number { font-weight: 600; margin-right: 8px; }
+        .filters { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 16px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 13px; cursor: pointer; background: white; transition: all 0.2s; }
+        .filter-btn:hover { border-color: #333; }
+        .filter-btn.active { background: #333; color: white; border-color: #333; }
+        .date-badge { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+        .date-badge.old { background: #f5f5f5; color: #999; }
         .job-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 24px; margin-bottom: 20px; transition: opacity 0.3s; }
         .job-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
         .job-title { font-size: 18px; font-weight: 600; }
@@ -27,94 +33,207 @@
         .job-score.green { background: #e8f5e9; color: #2e7d32; }
         .job-score.yellow { background: #fff3e0; color: #e65100; }
         .job-score.red { background: #ffebee; color: #c62828; }
+        .job-score.pending { background: #e3f2fd; color: #1565c0; }
         .job-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
         .detail { display: flex; flex-direction: column; gap: 4px; }
         .detail-label { font-size: 11px; color: #999; text-transform: uppercase; font-weight: 500; }
         .detail-value { font-size: 14px; }
         .detail-value a { color: #0066cc; text-decoration: none; }
         .detail-value a:hover { text-decoration: underline; }
+        .warning { font-size: 12px; color: #e65100; margin-top: 8px; padding: 8px 12px; background: #fff3e0; border-radius: 6px; }
         .btn { padding: 10px 16px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; margin-right: 8px; background: white; }
         .btn:hover { border-color: #333; }
         .btn-huntr { background: #0066cc; color: white; border-color: #0066cc; }
         .btn-huntr:hover { background: #0052a3; }
         .btn-reject { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
         .btn-reject:hover { background: #ffcdd2; }
-        .rejected { opacity: 0.5; }
+        .rejected { opacity: 0.3; }
+        .hidden { display: none; }
         .badge-red { color: #c62828; font-weight: 600; }
         .source { font-size: 11px; color: #ccc; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; }
+        .section-title { font-size: 16px; font-weight: 600; margin: 30px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #e0e0e0; }
+        .section-title.new { border-color: #1565c0; color: #1565c0; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Review & filter positions — Feb 15, 2026</p>
+            <p class="subtitle">Review & filter positions — Feb 16, 2026</p>
             <div class="stats">
-                <div><span class="stat-number" id="total">4</span>Total</div>
-                <div><span class="stat-number" id="active">4</span>Active</div>
-                <div><span class="stat-number" id="rejected">0</span>Rejected</div>
+                <div><span class="stat-number" id="total">11</span>Total</div>
+                <div><span class="stat-number" id="active">10</span>Active</div>
+                <div><span class="stat-number" id="rejected-count">1</span>Rejected</div>
             </div>
         </header>
 
-        <!-- Job 1: Revolut -->
-        <div class="job-card" id="job-1">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Revolut</div>
-                    <div class="job-company">Strategy & Operations Manager</div>
-                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/strategy-operations-manager-at-revolut-4359225027" target="_blank">🔗 View on LinkedIn →</a></div>
-                </div>
-                <div class="job-score yellow">82/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Switzerland</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Unspecified (CH-based)</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3+ years</div></div>
-                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">Unspecified</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">~1 week ago</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series E (Jul 2021, $75B valuation 2025 - Reuters)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Operations (no SQL/coding required)</div></div>
-                <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://ch.linkedin.com/jobs/view/strategy-operations-manager-at-revolut-4359225027" target="_blank">View Job →</a></div></div>
-            </div>
-            <div>
-                <button class="btn btn-huntr" onclick="addToHuntr('Revolut', 'Strategy & Operations Manager')">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(1)">✕ Reject</button>
-            </div>
-            <div class="source">Source: ChatGPT + LinkedIn</div>
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterJobs('all')">All</button>
+            <button class="filter-btn" onclick="filterJobs('green')">🟢 GREEN</button>
+            <button class="filter-btn" onclick="filterJobs('yellow')">🟡 YELLOW</button>
+            <button class="filter-btn" onclick="filterJobs('pending')">🔵 Validating</button>
+            <button class="filter-btn" onclick="filterJobs('new')">🆕 Today</button>
         </div>
 
-        <!-- Job 2: True Wealth -->
-        <div class="job-card" id="job-2">
+        <div class="section-title new">🆕 Feb 16, 2026 — Today's Finds</div>
+
+        <!-- NEW: Beloy -->
+        <div class="job-card" id="job-1" data-score="yellow" data-date="new">
             <div class="job-header">
                 <div>
-                    <div class="job-title">True Wealth AG</div>
-                    <div class="job-company">Founder's Associate (Temp, 40-60%)</div>
-                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/founder%E2%80%99s-associate-temporary-40%E2%80%9360%25-at-true-wealth-4354079655" target="_blank">🔗 View on LinkedIn →</a></div>
+                    <div class="job-title">Beloy <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Chief of Staff</div>
+                    <div class="job-link"><a href="https://welcometothejungle.com/en/companies/beloy/jobs/chief-of-staff_paris" target="_blank">🔗 View on WTTJ →</a></div>
                 </div>
                 <div class="job-score yellow">78/100</div>
             </div>
             <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Not specified</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">>2 years</div></div>
-                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">Unspecified</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">~3 weeks ago</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A (2016, verified Tracxn)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Exec support + Ops (no SQL/coding)</div></div>
-                <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://ch.linkedin.com/jobs/view/founder%E2%80%99s-associate-temporary-40%E2%80%9360%25-at-true-wealth-4354079655" target="_blank">View Job →</a></div></div>
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Paris, France (remote allowed?)</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">⚠️ Remote policy unclear (EU-wide?)</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Insurtech B2B</div></div>
+                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Corporate development + Strategy</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Startup (stage TBD)</div></div>
             </div>
-            <div>
-                <button class="btn btn-huntr" onclick="addToHuntr('True Wealth AG', 'Founder\'s Associate')">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(2)">✕ Reject</button>
+            <div class="warning">⚠️ Remote policy unclear — need to check if EU-wide remote is accepted</div>
+            <div style="margin-top: 12px;">
+                <button class="btn btn-huntr" onclick="addToHuntr(1)">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(1)">✕ Reject</button>
             </div>
-            <div class="source">Source: ChatGPT + LinkedIn (Series A via Tracxn)</div>
+            <div class="source">Source: Brave + WTTJ | Found: Feb 16, 2026</div>
         </div>
 
-        <!-- Job 3: Jua (Gemini) -->
-        <div class="job-card" id="job-3">
+        <!-- NEW: Nikan AI -->
+        <div class="job-card" id="job-2" data-score="yellow" data-date="new">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Jua</div>
+                    <div class="job-title">Nikan AI Gruppe <span class="date-badge">NEW</span></div>
+                    <div class="job-company">CoS Operations</div>
+                    <div class="job-link"><a href="https://stepstone.de/job/13541237" target="_blank">🔗 View on Stepstone →</a></div>
+                </div>
+                <div class="job-score yellow">72/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">100% Remote (Germany)</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ 100% Remote</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">AI startup ecosystem</div></div>
+                <div class="detail"><div class="detail-label">Contract</div><div class="detail-value">Permanent (unbefristet)</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Operations</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Stage unknown</div></div>
+            </div>
+            <div class="warning">⚠️ Job posting in German — German language likely required. Company stage unknown.</div>
+            <div style="margin-top: 12px;">
+                <button class="btn btn-huntr" onclick="addToHuntr(2)">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(2)">✕ Reject</button>
+            </div>
+            <div class="source">Source: Brave + Stepstone | Found: Feb 16, 2026</div>
+        </div>
+
+        <!-- NEW: Mistral AI -->
+        <div class="job-card" id="job-3" data-score="yellow" data-date="new">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Mistral AI <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Product Ops Manager</div>
+                    <div class="job-link"><a href="https://jobs.lever.co/mistral/ef656934-7246-4d93-b341-c907c348c444" target="_blank">🔗 View on Lever →</a></div>
+                </div>
+                <div class="job-score yellow">70/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Paris, France</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Distributed teams</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">AI (unicorn)</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">5+ years</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Ops (close to CoS)</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Unicorn (AI leader)</div></div>
+            </div>
+            <div class="warning">⚠️ Not pure CoS but close. 5+ years required. Coding "nice-to-have".</div>
+            <div style="margin-top: 12px;">
+                <button class="btn btn-huntr" onclick="addToHuntr(3)">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(3)">✕ Reject</button>
+            </div>
+            <div class="source">Source: Brave + Lever | Found: Feb 16, 2026</div>
+        </div>
+
+        <!-- NEW: Expatrio (LinkedIn, validating) -->
+        <div class="job-card" id="job-4" data-score="pending" data-date="new">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Expatrio <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Chief of Staff (f/m/x)</div>
+                </div>
+                <div class="job-score pending">🔵 Validating</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech / Edtech</div></div>
+                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Appears active</div></div>
+            </div>
+            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
+        </div>
+
+        <!-- NEW: SumUp (LinkedIn, validating) -->
+        <div class="job-card" id="job-5" data-score="pending" data-date="new">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">SumUp <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Chief of Staff</div>
+                </div>
+                <div class="job-score pending">🔵 Validating</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech (3000+ employees, Series B+)</div></div>
+                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">Chief Hardware Officer</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">⚠️ Unverified (need to check if open)</div></div>
+            </div>
+            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
+        </div>
+
+        <!-- NEW: Lano (LinkedIn, validating) -->
+        <div class="job-card" id="job-6" data-score="pending" data-date="new">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Lano <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Chief of Staff</div>
+                </div>
+                <div class="job-score pending">🔵 Validating</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">HR-tech, Series A+, remote-first</div></div>
+                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO (implied)</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟡 Unverified (role details unclear)</div></div>
+            </div>
+            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
+        </div>
+
+        <!-- NEW: Cartloop (LinkedIn, validating) -->
+        <div class="job-card" id="job-7" data-score="pending" data-date="new">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Cartloop <span class="date-badge">NEW</span></div>
+                    <div class="job-company">Chief of Staff (Remote)</div>
+                </div>
+                <div class="job-score pending">🔵 Validating</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">London, UK (Remote)</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Remote-first</div></div>
+                <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Startup</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Operating cadence, OKRs, team coordination</div></div>
+            </div>
+            <div class="source">Source: LinkedIn | Found: Feb 16, 2026 | Validation in progress</div>
+        </div>
+
+        <div class="section-title">📋 Feb 15, 2026 — Previous</div>
+
+        <!-- OLD: Jua -->
+        <div class="job-card" id="job-8" data-score="green" data-date="old">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Jua <span class="date-badge old">Feb 15</span></div>
                     <div class="job-company">Chief of Staff</div>
                     <div class="job-link"><a href="https://example.com/jua-cos" target="_blank">🔗 View Job →</a></div>
                 </div>
@@ -125,55 +244,113 @@
                 <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Hybrid (flexible)</div></div>
                 <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3-5 years</div></div>
                 <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
-                <div class="detail"><div class="detail-label">Posted</div><div class="detail-value">Feb 15, 2026</div></div>
+                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Strategy + Operations</div></div>
                 <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A+ (AI/SaaS)</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Strategy + operations</div></div>
-                <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://example.com/jua-cos" target="_blank">View Job →</a></div></div>
             </div>
-            <div>
-                <button class="btn btn-huntr" onclick="addToHuntr('Jua', 'Chief of Staff')">+ Add to Huntr</button>
-                <button class="btn btn-reject" onclick="rejectJob(3)">✕ Reject</button>
+            <div style="margin-top: 12px;">
+                <button class="btn btn-huntr" onclick="addToHuntr(8)">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(8)">✕ Reject</button>
             </div>
-            <div class="source">Source: Gemini</div>
+            <div class="source">Source: Gemini | Found: Feb 15, 2026</div>
         </div>
 
-        <!-- Job 4: Revizto (Brave - REJECTED) -->
-        <div class="job-card rejected" id="job-4">
+        <!-- OLD: Revolut -->
+        <div class="job-card" id="job-9" data-score="yellow" data-date="old">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Revizto</div>
+                    <div class="job-title">Revolut <span class="date-badge old">Feb 15</span></div>
+                    <div class="job-company">Strategy & Operations Manager</div>
+                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/strategy-operations-manager-at-revolut-4359225027" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">82/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Switzerland</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">Unspecified (CH-based)</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3+ years</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series E ($75B valuation)</div></div>
+            </div>
+            <div style="margin-top: 12px;">
+                <button class="btn btn-huntr" onclick="addToHuntr(9)">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(9)">✕ Reject</button>
+            </div>
+            <div class="source">Source: ChatGPT + LinkedIn | Found: Feb 15, 2026</div>
+        </div>
+
+        <!-- OLD: True Wealth -->
+        <div class="job-card" id="job-10" data-score="yellow" data-date="old">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">True Wealth AG <span class="date-badge old">Feb 15</span></div>
+                    <div class="job-company">Founder's Associate (Temp, 40-60%)</div>
+                    <div class="job-link"><a href="https://ch.linkedin.com/jobs/view/founder%E2%80%99s-associate-temporary-40%E2%80%9360%25-at-true-wealth-4354079655" target="_blank">🔗 View on LinkedIn →</a></div>
+                </div>
+                <div class="job-score yellow">78/100</div>
+            </div>
+            <div class="job-details">
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland</div></div>
+                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">>2 years</div></div>
+                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A (Fintech)</div></div>
+            </div>
+            <div style="margin-top: 12px;">
+                <button class="btn btn-huntr" onclick="addToHuntr(10)">+ Add to Huntr</button>
+                <button class="btn btn-reject" onclick="rejectJob(10)">✕ Reject</button>
+            </div>
+            <div class="source">Source: ChatGPT + LinkedIn | Found: Feb 15, 2026</div>
+        </div>
+
+        <!-- OLD: Revizto REJECTED -->
+        <div class="job-card rejected" id="job-11" data-score="red" data-date="old">
+            <div class="job-header">
+                <div>
+                    <div class="job-title">Revizto <span class="date-badge old">Feb 15</span></div>
                     <div class="job-company">Sr. Manager GTM Strategy & Operations</div>
-                    <div class="job-link"><a href="https://remotive.com/remote/jobs/sales-business/sr-manager-gtm-strategy-operations-3614433" target="_blank">🔗 View on Remotive →</a></div>
                 </div>
                 <div class="job-score red">REJECTED</div>
             </div>
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Remote</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value"><span class="badge-red">❌ Remote (UK, Germany, France, Spain)</span></div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">8-12 years</div></div>
-                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">Unspecified</div></div>
-                <div class="detail"><div class="detail-label">Reason</div><div class="detail-value">Requires specific country location</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series B+ (SaaS)</div></div>
-                <div class="detail"><div class="detail-label">URL</div><div class="detail-value"><a href="https://remotive.com/remote/jobs/sales-business/sr-manager-gtm-strategy-operations-3614433" target="_blank">View Job →</a></div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value"><span class="badge-red">❌ Remote (UK, DE, FR, ES only)</span></div></div>
+                <div class="detail"><div class="detail-label">Reason</div><div class="detail-value">Country-restricted remote</div></div>
             </div>
-            <div style="font-size: 12px; color: #999;">
-                ❌ Rejected: "Remote (UK, Germany, France, Spain)" = requires employee to be in one of those countries. Настя is in Malta/Switzerland.
-            </div>
-            <div class="source">Source: Brave</div>
+            <div class="source">Source: Brave | Found: Feb 15, 2026</div>
         </div>
 
     </div>
 
     <script>
-        function addToHuntr(company, title) {
-            alert(`✅ Adding "${title}" at ${company} to Huntr...\n\nIn production: integration with Huntr API`);
+        function addToHuntr(jobId) {
+            const card = document.getElementById(`job-${jobId}`);
+            const title = card.querySelector('.job-title').textContent.replace(/NEW|Feb \d+/g, '').trim();
+            const role = card.querySelector('.job-company').textContent;
+            alert(`✅ "${role}" at ${title} → will be added to Huntr automatically by Эмилио 🦀`);
         }
 
         function rejectJob(jobId) {
             const card = document.getElementById(`job-${jobId}`);
             card.classList.add('rejected');
-            document.getElementById('active').textContent = parseInt(document.getElementById('active').textContent) - 1;
-            document.getElementById('rejected').textContent = parseInt(document.getElementById('rejected').textContent) + 1;
+            updateCounts();
+        }
+
+        function updateCounts() {
+            const all = document.querySelectorAll('.job-card');
+            const rejected = document.querySelectorAll('.job-card.rejected');
+            document.getElementById('total').textContent = all.length;
+            document.getElementById('active').textContent = all.length - rejected.length;
+            document.getElementById('rejected-count').textContent = rejected.length;
+        }
+
+        function filterJobs(type) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.job-card').forEach(card => {
+                if (type === 'all') { card.classList.remove('hidden'); return; }
+                if (type === 'new') {
+                    card.classList.toggle('hidden', card.dataset.date !== 'new');
+                } else {
+                    card.classList.toggle('hidden', card.dataset.score !== type);
+                }
+            });
         }
     </script>
 </body>
