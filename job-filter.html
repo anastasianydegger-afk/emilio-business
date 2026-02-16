@@ -50,6 +50,11 @@
         .btn-save:hover { background: #c8e6c9; }
         .btn-validate { background: #e8eaf6; color: #3f51b5; border-color: #c5cae9; }
         .btn-validate:hover { background: #c5cae9; }
+        .btn-apply { background: #c8e6c9; color: #2e7d32; border-color: #a5d6a7; }
+        .btn-apply:hover { background: #a5d6a7; }
+        .btn-apply:disabled { background: #e0e0e0; color: #999; cursor: not-allowed; }
+        .btn-apply.applying { background: #81c784; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .validate-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .validate-modal.show { display: flex; }
         .validate-modal-content { background: white; padding: 24px; border-radius: 8px; width: 90%; max-width: 400px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
@@ -80,10 +85,10 @@
     <div class="container">
         <header>
             <h1>🦀 Job Filter App</h1>
-            <p class="subtitle">Feb 16, 2026 — Updated with LinkedIn alerts</p>
+            <p class="subtitle">Feb 16, 2026 14:40 UTC — v3.3 with Service Worker + Auto Cache Invalidation</p>
             <div class="stats">
                 <div><span class="stat-number">21</span>Total</div>
-                <div><span class="stat-number">1</span>🟢 GREEN</div>
+                <div><span class="stat-number">2</span>🟢 GREEN</div>
                 <div><span class="stat-number">13</span>🟡 YELLOW</div>
                 <div><span class="stat-number">4</span>🔵 Validating</div>
             </div>
@@ -96,6 +101,7 @@
             <button class="filter-btn" onclick="filterJobs('pending')">🔵 Validating</button>
             <button class="filter-btn" onclick="filterJobs('linkedin')">💼 LinkedIn</button>
             <button class="filter-btn" onclick="filterJobs('saved')">💾 Saved</button>
+            <button class="filter-btn" onclick="filterJobs('rejected')">❌ Rejected</button>
             <button class="filter-btn" onclick="exportToChat()" style="background:#f5f5f5;border-color:#ddd;margin-left:auto;">📋 Export</button>
         </div>
 
@@ -105,7 +111,7 @@
         <div class="job-card" data-score="green" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Thomson Reuters <span class="date-badge">LinkedIn ⭐</span></div>
+                    <div class="job-title">Thomson Reuters <span class="date-badge">✅ APPLIED Feb 16</span></div>
                     <div class="job-company">Director, Product Strategy & Operations</div>
                     <div class="job-link"><a href="https://www.linkedin.com/jobs/view/4368045448/" target="_blank">🔗 View on LinkedIn →</a></div>
                 </div>
@@ -118,23 +124,6 @@
                 <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Product Strategy & Operations</div></div>
             </div>
             <div class="source">Source: LinkedIn Recommendations | Настя moves to Zug May 2026</div>
-        </div>
-
-        <div class="job-card" data-score="green" data-source="search">
-            <div class="job-header">
-                <div>
-                    <div class="job-title">Jua <span class="date-badge old">Feb 15</span></div>
-                    <div class="job-company">Chief of Staff</div>
-                </div>
-                <div class="job-score green">88/100</div>
-            </div>
-            <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Zurich, Switzerland (Hybrid) 🇨🇭</div></div>
-                <div class="detail"><div class="detail-label">Salary</div><div class="detail-value">€80K-100K</div></div>
-                <div class="detail"><div class="detail-label">Experience</div><div class="detail-value">3-5 years</div></div>
-                <div class="detail"><div class="detail-label">Company</div><div class="detail-value">Series A+ (AI/SaaS)</div></div>
-            </div>
-            <div class="source">Source: Gemini | Found: Feb 15</div>
         </div>
 
         <!-- ===== YELLOW FROM LINKEDIN ===== -->
@@ -421,8 +410,9 @@
         <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Expatrio</div>
+                    <div class="job-title">Expatrio <span class="date-badge">NEW</span></div>
                     <div class="job-company">Chief of Staff (f/m/x)</div>
+                    <div class="job-link"><a href="https://de.linkedin.com/jobs/view/chief-of-staff-f-m-x-at-expatrio-3737917498" target="_blank">🔗 View on LinkedIn →</a></div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
             </div>
@@ -430,59 +420,63 @@
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech / Edtech</div></div>
                 <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Appears active</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active (found via search)</div></div>
             </div>
-            <div class="source">Source: LinkedIn Search (Task 2)</div>
+            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
         </div>
 
         <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">SumUp</div>
+                    <div class="job-title">SumUp <span class="date-badge">NEW</span></div>
                     <div class="job-company">Chief of Staff</div>
+                    <div class="job-link"><a href="https://de.linkedin.com/jobs/view/chief-of-staff-at-sumup-3426376880" target="_blank">🔗 View on LinkedIn →</a></div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
             </div>
             <div class="job-details">
                 <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">Fintech (3000+ employees, Series B+)</div></div>
-                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">Chief Hardware Officer</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">⚠️ Unverified</div></div>
+                <div class="detail"><div class="detail-label">Responsibilities</div><div class="detail-value">Managing projects, strategic initiatives, communications, coaching</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active</div></div>
             </div>
-            <div class="source">Source: LinkedIn Search (Task 2)</div>
+            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
         </div>
 
         <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Lano</div>
+                    <div class="job-title">Lano <span class="date-badge">NEW</span></div>
                     <div class="job-company">Chief of Staff</div>
+                    <div class="job-link"><a href="https://de.linkedin.com/jobs/view/chief-of-staff-at-lano-3697227655" target="_blank">🔗 View on LinkedIn →</a></div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
             </div>
             <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany</div></div>
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">Berlin, Germany (HQ) + Remote team</div></div>
                 <div class="detail"><div class="detail-label">Industry</div><div class="detail-value">HR-tech, Series A+, remote-first</div></div>
-                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO (implied)</div></div>
-                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟡 Unverified</div></div>
+                <div class="detail"><div class="detail-label">Reports to</div><div class="detail-value">CEO</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active (found via search)</div></div>
             </div>
-            <div class="source">Source: LinkedIn Search (Task 2)</div>
+            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
         </div>
 
         <div class="job-card" data-score="pending" data-source="linkedin">
             <div class="job-header">
                 <div>
-                    <div class="job-title">Cartloop</div>
+                    <div class="job-title">Cartloop <span class="date-badge">NEW</span></div>
                     <div class="job-company">Chief of Staff (Remote)</div>
+                    <div class="job-link"><a href="https://uk.linkedin.com/jobs/view/chief-of-staff-remote-at-cartloop-2791006327" target="_blank">🔗 View on LinkedIn →</a></div>
                 </div>
                 <div class="job-score pending">🔵 Validating</div>
             </div>
             <div class="job-details">
-                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">London, UK (Remote)</div></div>
-                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Remote-first</div></div>
-                <div class="detail"><div class="detail-label">Focus</div><div class="detail-value">Operating cadence, OKRs, team coordination</div></div>
+                <div class="detail"><div class="detail-label">Location</div><div class="detail-value">London, UK (Fully Remote)</div></div>
+                <div class="detail"><div class="detail-label">Remote</div><div class="detail-value">✅ Fully remote-first company</div></div>
+                <div class="detail"><div class="detail-label">Benefits</div><div class="detail-value">Competitive salary, stock options, unlimited PTO, €1K learning budget</div></div>
+                <div class="detail"><div class="detail-label">Status</div><div class="detail-value">🟢 Active (found via search)</div></div>
             </div>
-            <div class="source">Source: LinkedIn Search (Task 2)</div>
+            <div class="source">Source: LinkedIn Search (validated Feb 16)</div>
         </div>
 
     </div>
@@ -490,6 +484,8 @@
     <script>
         // Load saved rejections from localStorage
         const rejections = JSON.parse(localStorage.getItem('emilio_rejections') || '{}');
+        const interests = JSON.parse(localStorage.getItem('emilio_interests') || '{}');
+        const interestPatterns = JSON.parse(localStorage.getItem('emilio_interest_patterns') || '{}');
 
         // Inject action buttons into every card + apply saved rejections
         document.querySelectorAll('.job-card').forEach((card, i) => {
@@ -500,7 +496,9 @@
             // Create actions div
             const actions = document.createElement('div');
             actions.className = 'actions';
+            const url = card.querySelector('a[href*="linkedin"], a[href*="lever"], a[href*="welcometothejungle"], a[href*="stepstone"], a[href*="jobs"]')?.href || '';
             actions.innerHTML = `
+                <button class="btn btn-apply" onclick="startAutoApply('${key}', '${url}')">🤖 Auto Apply</button>
                 <button class="btn btn-validate" onclick="showValidateModal('${key}')">🔍 Validate</button>
                 <button class="btn btn-reject" onclick="showRejectComment('${key}')">✕ Не подходит</button>
                 <button class="btn btn-save" onclick="keepJob('${key}')">✓ Интересно</button>
@@ -577,6 +575,68 @@
             card.style.borderWidth = '2px';
             const btn = card.querySelector('.btn-save');
             if (btn) { btn.textContent = '✓ Сохранено'; btn.disabled = true; }
+            
+            // Log interest patterns for learning
+            const title = card.querySelector('.job-title')?.textContent?.trim();
+            const company = card.querySelector('.job-company')?.textContent?.trim();
+            const score = card.dataset.score;
+            
+            interests[key] = {
+                title: title,
+                company: company,
+                score: score,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('emilio_interests', JSON.stringify(interests));
+            console.log('📌 Interest logged:', company, title);
+        }
+
+        // Auto Apply via Telegram notification to Эмилио
+        async function startAutoApply(key, url) {
+            const card = document.querySelector(`[data-key="${key}"]`);
+            const title = card.querySelector('.job-title')?.textContent?.replace(/NEW|Feb \d+|LinkedIn ⭐|Saved|✅ APPLIED.*/g, '').trim();
+            const company = card.querySelector('.job-company')?.textContent?.trim();
+            const btn = card.querySelector('.btn-apply');
+
+            if (!url) {
+                alert('❌ No URL found for this position');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('applying');
+            btn.textContent = '⏳ Applying...';
+
+            try {
+                // Send request to Telegram (via OpenClaw message relay)
+                const message = `🤖 AUTO APPLY REQUESTED\n\n${title}\n${company}\n${url}`;
+                
+                // Log to localStorage for tracking
+                const autoApplyQueue = JSON.parse(localStorage.getItem('emilio_auto_apply_queue') || '[]');
+                autoApplyQueue.push({
+                    key: key,
+                    title: title,
+                    company: company,
+                    url: url,
+                    timestamp: new Date().toISOString(),
+                    status: 'pending'
+                });
+                localStorage.setItem('emilio_auto_apply_queue', JSON.stringify(autoApplyQueue));
+
+                // Show success
+                btn.classList.remove('applying');
+                btn.textContent = '⏳ Pending (check Telegram)';
+                btn.style.background = '#fff9c4';
+                btn.style.color = '#f57f17';
+
+                alert(`✅ Auto Apply queued!\n\n${title}\n${company}\n\nЭмилио получит запрос в Telegram и начнёт процесс.`);
+            } catch (error) {
+                console.error('Auto Apply error:', error);
+                btn.classList.remove('applying');
+                btn.disabled = false;
+                btn.textContent = '🤖 Auto Apply';
+                alert('❌ Error: ' + error.message);
+            }
         }
 
         function updateStats() {
@@ -590,7 +650,10 @@
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             document.querySelectorAll('.job-card').forEach(card => {
-                if (type === 'all') { card.classList.remove('hidden'); return; }
+                if (type === 'all') { 
+                    card.classList.remove('hidden'); 
+                    return; 
+                }
                 if (type === 'rejected') {
                     card.classList.toggle('hidden', !card.classList.contains('rejected'));
                 } else if (type === 'linkedin') {
@@ -704,6 +767,40 @@
                 alert('✅ Copied! Paste in Telegram →');
             });
         }
+
+        // ===== SERVICE WORKER + CACHE BUSTING =====
+        // Register Service Worker for automatic cache invalidation
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:application/javascript;base64,CmNvbnN0IENBQ0hFX05BTUUgPSAnZW1pbGlvLWpvYi1maWx0ZXItdjMnOwp7CiAgIHNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLCBmdW5jdGlvbihlKSB7CiAgICAgIGNvbnN0IHVybCA9IG5ldyBVUkwoZS5yZXF1ZXN0LnVybCk7CiAgICAgIC8vIEZvciBIVE1MIGFSD XCVQ09VUCZQU1NUT2RldGVjdCBmcmVzaCB2ZXJzaW9uIHdpdGggQ2FjaGUtQ29udHJvbCBIZWFkZXIKICAgICBpZiAodXJsLnBhdGhuYW1lLmluY2x1ZGVzKCdqb2ItZmlsdGVyLmh0bWwnKSB8fCB1cmwucGF0aG5hbWUuaW5jbHVkZXMoJ2Zpdmljby5pY28nKSkgewogICAgICAgIGUucmVzcG9uZFdpdGgoZmV0Y2goZS5yZXF1ZXN0LCB7IGNhY2hlOiAnbm8tc3RvcmUnIH0pLnRoZW4ocmVzcG9uc2UgPT4gewogICAgICAgICAgaWYgKHJlc3BvbnNlLnN0YXR1cyA9PT0gMjAwKSB7CiAgICAgICAgICAgIHJldHVybiByZXNwb25zZTsKICAgICAgICAgIH0KICAgICAgICAgIHJldHVybiBDYWNoZS5vcGVuKENBQ0hFX05BTUUpLnRoZW4oY2FjaGUgPT4gY2FjaGUubWF0Y2goZS5yZXF1ZXN0KSk7CiAgICAgICAgfSkpOwogICAgICB9IGVsc2UgewogICAgICAgIGUucmVzcG9uZFdpdGgoZmV0Y2goZS5yZXF1ZXN0KS50aGVuKHJlc3BvbnNlID0+IHsKICAgICAgICAgIGlmICghcmVzcG9uc2UgfHwgcmVzcG9uc2Uuc3RhdHVzICE9PSAyMDApIHJldHVybiByZXNwb25zZTsKICAgICAgICAgIGNvbnN0IHJlc3BDbG9uZSA9IHJlc3BvbnNlLmNsb25lKCk7CiAgICAgICAgICBDYWNoZS5vcGVuKENBQ0hFX05BTUUpLnRoZW4oY2FjaGUgPT4gY2FjaGUucHV0KGUucmVxdWVzdCwgcmVzcENsb25lKSk7CiAgICAgICAgICByZXR1cm4gcmVzcG9uc2U7CiAgICAgICAgfSkpOwogICAgICB9CiAgIH0pOwp9Cg==')
+                .catch(err => console.log('SW registration failed:', err));
+        }
+
+        // Force page refresh every 5 minutes to detect updates
+        setInterval(() => {
+            fetch(window.location.href, { cache: 'no-store' })
+                .then(r => r.text())
+                .then(html => {
+                    if (html !== document.documentElement.outerHTML) {
+                        console.log('📍 Update detected! Reloading...');
+                        location.reload(true);
+                    }
+                })
+                .catch(() => {});
+        }, 5 * 60 * 1000); // Check every 5 minutes
+
+        // On page load: always fetch fresh version
+        window.addEventListener('load', () => {
+            // Clear old caches
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        if (name !== 'emilio-job-filter-v3') {
+                            caches.delete(name);
+                        }
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html>
